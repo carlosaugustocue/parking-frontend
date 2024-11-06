@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <div>
-      <!-- Verifica si hay algún espacio ocupado -->
       <div v-if="hasOccupiedSpaces" class="parking-lot">
         <div
           v-for="(space, index) in spaces"
@@ -9,7 +8,6 @@
           class="parking-space"
           @click="handleClick(space)"
         >
-          <!-- Información del vehículo si el espacio está ocupado -->
           <div v-if="space.occupied" class="vehicle-info">
             <p class="plate">{{ space.placa }}</p>
             <p class="type">{{ space.tipoVehiculo }}</p>
@@ -19,14 +17,11 @@
               class="vehicle-image"
             />
           </div>
-          
-          <!-- Muestra texto si el espacio está libre -->
           <div v-else class="empty-space">
             <p class="text">Espacio Libre</p>
           </div>
         </div>
       </div>
-      <!-- Muestra un mensaje si no hay autos en el parqueadero -->
       <div v-else class="no-cars-message">
         <p>No hay autos en el parqueadero.</p>
       </div>
@@ -37,16 +32,13 @@
 <script>
 import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
-
-// Importa las imágenes de los vehículos
 import CarImage from '@/assets/car_top_view.png';
 import MotorcycleImage from '@/assets/motorcycle_top_view.png';
 import TruckImage from '@/assets/truck_top_view.png';
 import DefaultImage from '@/assets/default_vehicle_top_view.png';
 
 export default {
-  emits: ['showInvoice'],
-  setup(_, { emit }) {
+  setup() {
     const spaces = ref([]);
     const hasOccupiedSpaces = ref(false);
 
@@ -62,7 +54,6 @@ export default {
           occupied: !!vehiculo.placa,
         }));
 
-        // Verifica si hay al menos un espacio ocupado
         hasOccupiedSpaces.value = spaces.value.some(space => space.occupied);
       } catch (error) {
         console.error('Error al obtener el estado del parqueadero:', error);
@@ -86,7 +77,7 @@ export default {
       if (space.occupied) {
         Swal.fire({
           title: '¿Registrar salida?',
-          text: `¿Deseas registrar la salida del vehículo con placa ${space.placa}?`,
+          html: `¿Deseas registrar la salida del vehículo con placa <span class="badge bg-warning text-dark">${space.placa}</span>?`,
           icon: 'warning',
           showCancelButton: true,
           confirmButtonText: 'Sí, registrar salida',
@@ -100,23 +91,26 @@ export default {
               if (!response.ok) throw new Error('Error al procesar la salida del vehículo.');
 
               const data = await response.json();
-              emit('showInvoice', {
-                placa: space.placa,
-                tipoVehiculo: space.tipoVehiculo,
-                horaIngreso: space.horaIngreso,
-                horaSalida: new Date().toISOString(),
-                costoTotal: data.costoTotal,
-              });
 
-              fetchParkingStatus();
-
+              // Mostrar la factura en el SweetAlert
               Swal.fire({
                 title: 'Salida registrada',
-                text: 'La salida del vehículo ha sido registrada exitosamente.',
+                html: `
+                  <div class="invoice">
+                    <h3>Factura de Salida</h3>
+                    <p><strong>Placa:</strong><span class="badge bg-warning text-dark">${data.placa}</span>
+</p>
+                    <p><strong>Tipo de Vehículo:</strong> ${space.tipoVehiculo}</p>
+                    <p><strong>Hora de Ingreso:</strong> ${space.horaIngreso}</p>
+                    <p><strong>Hora de Salida:</strong> ${new Date().toLocaleTimeString()}</p>
+                    <p><strong>Costo Total:</strong> ${data.costoTotal}</p>
+                  </div>
+                `,
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
               });
 
+              fetchParkingStatus();
             } catch (error) {
               console.error('Error al registrar la salida:', error);
               Swal.fire({
@@ -171,11 +165,6 @@ export default {
   position: relative; /* Necesario para posicionar la placa sobre la imagen */
 }
 
-.vehicle-info {
-  text-align: center;
-  position: relative;
-}
-
 .plate, .type {
   position: absolute;
   top: 5px; /* Ajusta para posicionar sobre la imagen */
@@ -210,5 +199,17 @@ export default {
   color: #6c757d;
   font-size: 1.5rem;
   margin-top: 20px;
+}
+
+/* Estilo de la factura para SweetAlert */
+.invoice {
+  text-align: left;
+  border: 1px dashed #333;
+  padding: 15px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  background-color: #f9f9f9;
+  border-radius: 5px;
 }
 </style>
