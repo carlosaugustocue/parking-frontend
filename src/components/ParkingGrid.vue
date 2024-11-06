@@ -1,26 +1,33 @@
 <template>
-  <div class="parking-lot">
-    <div
-      v-for="(space, index) in spaces"
-      :key="index"
-      class="parking-space"
-      @click="handleClick(space)"
-    >
-      <!-- Información del vehículo si el espacio está ocupado -->
-      <div v-if="space.occupied" class="vehicle-info">
-        <p class="plate">{{ space.placa }}</p>
-        <p class="type">{{ space.tipoVehiculo }}</p>
-        <img
-          :src="getVehicleImage(space.tipoVehiculo)"
-          alt="Vehículo"
-          class="vehicle-image"
-        />
+  <div>
+    <!-- Verifica si hay algún espacio ocupado -->
+    <div v-if="hasOccupiedSpaces" class="parking-lot">
+      <div
+        v-for="(space, index) in spaces"
+        :key="index"
+        class="parking-space"
+        @click="handleClick(space)"
+      >
+        <!-- Información del vehículo si el espacio está ocupado -->
+        <div v-if="space.occupied" class="vehicle-info">
+          <p class="plate">{{ space.placa }}</p>
+          <p class="type">{{ space.tipoVehiculo }}</p>
+          <img
+            :src="getVehicleImage(space.tipoVehiculo)"
+            alt="Vehículo"
+            class="vehicle-image"
+          />
+        </div>
+        
+        <!-- Muestra texto si el espacio está libre -->
+        <div v-else class="empty-space">
+          <p class="text">Espacio Libre</p>
+        </div>
       </div>
-      
-      <!-- Muestra texto si el espacio está libre -->
-      <div v-else class="empty-space">
-        <p class="text">Espacio Libre</p>
-      </div>
+    </div>
+    <!-- Muestra un mensaje si no hay autos en el parqueadero -->
+    <div v-else class="no-cars-message">
+      <p>No hay autos en el parqueadero.</p>
     </div>
   </div>
 </template>
@@ -39,12 +46,12 @@ export default {
   emits: ['showInvoice'],
   setup(_, { emit }) {
     const spaces = ref([]);
+    const hasOccupiedSpaces = ref(false);
 
     const fetchParkingStatus = async () => {
       try {
         const response = await fetch('http://localhost:8080/api/vehiculos');
         const data = await response.json();
-        console.log('Estado del parqueadero:', data);
         spaces.value = data.map((vehiculo, index) => ({
           index,
           placa: vehiculo.placa || null,
@@ -52,12 +59,14 @@ export default {
           horaIngreso: vehiculo.horaIngreso || null,
           occupied: !!vehiculo.placa,
         }));
+
+        // Verifica si hay al menos un espacio ocupado
+        hasOccupiedSpaces.value = spaces.value.some(space => space.occupied);
       } catch (error) {
         console.error('Error al obtener el estado del parqueadero:', error);
       }
     };
 
-    // Usa las importaciones de imagen para obtener la imagen correspondiente
     const getVehicleImage = (tipoVehiculo) => {
       switch (tipoVehiculo.toLowerCase()) {
         case 'carro':
@@ -131,7 +140,7 @@ export default {
       fetchParkingStatus();
     });
 
-    return { spaces, handleClick, getVehicleImage };
+    return { spaces, hasOccupiedSpaces, handleClick, getVehicleImage };
   }
 };
 </script>
@@ -139,7 +148,6 @@ export default {
 <style scoped>
 .parking-lot {
   display: grid;
-  border-radius: 10px;
   grid-template-columns: repeat(4, 1fr); /* Ajusta el número de columnas según tus necesidades */
   gap: 15px;
   padding: 20px;
@@ -192,5 +200,12 @@ export default {
   font-size: 1.2rem;
   font-style: italic;
   text-align: center;
+}
+
+.no-cars-message {
+  text-align: center;
+  color: #6c757d;
+  font-size: 1.5rem;
+  margin-top: 20px;
 }
 </style>

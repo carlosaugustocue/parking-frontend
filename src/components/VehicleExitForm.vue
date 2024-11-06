@@ -1,19 +1,45 @@
 <template>
-  <div>
-    <h2>Registrar Salida de Vehículo</h2>
-    <form @submit.prevent="exitVehicle">
-      <input v-model="placa" placeholder="Placa" required />
-      <label>
-        <input type="checkbox" v-model="cobrarPorMinuto" /> Cobrar por minuto
-      </label>
-      <button type="submit">Registrar Salida</button>
-    </form>
-    <div v-if="responseData">
-      <p><strong>Placa:</strong> {{ responseData.placa }}</p>
-      <p><strong>Costo Total:</strong> {{ responseData.costoTotal }}</p>
-      <p><strong>Mensaje:</strong> {{ responseData.mensaje }}</p>
+  <div class="container mt-5">
+    <div class="card mx-auto" style="max-width: 500px;">
+      <div class="card-body">
+        <h2 class="card-title text-center mb-4">Registrar Salida de Vehículo</h2>
+        <form @submit.prevent="exitVehicle">
+          <div class="mb-3">
+            <label for="placa" class="form-label">Placa</label>
+            <input
+              v-model="placa"
+              type="text"
+              id="placa"
+              class="form-control"
+              placeholder="Ej: ABC123"
+              required
+            />
+          </div>
+          <div class="form-check mb-3">
+            <input
+              type="checkbox"
+              v-model="cobrarPorMinuto"
+              class="form-check-input"
+              id="cobrarPorMinuto"
+            />
+            <label class="form-check-label" for="cobrarPorMinuto">
+              Cobrar por minuto
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Registrar Salida</button>
+        </form>
+
+        <!-- Mostrar respuesta después de la salida -->
+        <div v-if="responseData" class="mt-4">
+          <p><strong>Placa:</strong> {{ responseData.placa }}</p>
+          <p><strong>Costo Total:</strong> {{ responseData.costoTotal }}</p>
+          <p><strong>Mensaje:</strong> {{ responseData.mensaje }}</p>
+        </div>
+
+        <!-- Mensaje de error -->
+        <p v-if="message" class="mt-3 text-center text-danger">{{ message }}</p>
+      </div>
     </div>
-    <p v-if="message">{{ message }}</p>
   </div>
 </template>
 
@@ -51,5 +77,5 @@ export default {
 </script>
 
 <style scoped>
-/* Agrega estilos específicos si lo deseas */
+/* Estilos personalizados si son necesarios */
 </style>

@@ -1,6 +1,5 @@
 <template>
     <div>
-      <h1>Registro de Entrada</h1>
       <VehicleEntryForm />
     </div>
   </template>

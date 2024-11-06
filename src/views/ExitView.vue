@@ -1,6 +1,5 @@
 <template>
     <div>
-      <h1>Registro de Salida</h1>
       <VehicleExitForm />
     </div>
   </template>

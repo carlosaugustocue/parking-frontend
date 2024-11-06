@@ -1,7 +1,7 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
     <div class="container-fluid">
-      <router-link to="/" class="navbar-brand">Parqueadero</router-link>
+      <router-link to="/" class="navbar-brand"><h1>Parqueadero</h1></router-link>
       <button
         class="navbar-toggler"
         type="button"
