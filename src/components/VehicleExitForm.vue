@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-5">
+  <div class="container">
     <div class="card mx-auto" style="max-width: 500px;">
       <div class="card-body">
         <h2 class="card-title text-center mb-4">Registrar Salida de Vehículo</h2>

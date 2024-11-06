@@ -1,33 +1,35 @@
 <template>
-  <div>
-    <!-- Verifica si hay algún espacio ocupado -->
-    <div v-if="hasOccupiedSpaces" class="parking-lot">
-      <div
-        v-for="(space, index) in spaces"
-        :key="index"
-        class="parking-space"
-        @click="handleClick(space)"
-      >
-        <!-- Información del vehículo si el espacio está ocupado -->
-        <div v-if="space.occupied" class="vehicle-info">
-          <p class="plate">{{ space.placa }}</p>
-          <p class="type">{{ space.tipoVehiculo }}</p>
-          <img
-            :src="getVehicleImage(space.tipoVehiculo)"
-            alt="Vehículo"
-            class="vehicle-image"
-          />
-        </div>
-        
-        <!-- Muestra texto si el espacio está libre -->
-        <div v-else class="empty-space">
-          <p class="text">Espacio Libre</p>
+  <div class="container">
+    <div>
+      <!-- Verifica si hay algún espacio ocupado -->
+      <div v-if="hasOccupiedSpaces" class="parking-lot">
+        <div
+          v-for="(space, index) in spaces"
+          :key="index"
+          class="parking-space"
+          @click="handleClick(space)"
+        >
+          <!-- Información del vehículo si el espacio está ocupado -->
+          <div v-if="space.occupied" class="vehicle-info">
+            <p class="plate">{{ space.placa }}</p>
+            <p class="type">{{ space.tipoVehiculo }}</p>
+            <img
+              :src="getVehicleImage(space.tipoVehiculo)"
+              alt="Vehículo"
+              class="vehicle-image"
+            />
+          </div>
+          
+          <!-- Muestra texto si el espacio está libre -->
+          <div v-else class="empty-space">
+            <p class="text">Espacio Libre</p>
+          </div>
         </div>
       </div>
-    </div>
-    <!-- Muestra un mensaje si no hay autos en el parqueadero -->
-    <div v-else class="no-cars-message">
-      <p>No hay autos en el parqueadero.</p>
+      <!-- Muestra un mensaje si no hay autos en el parqueadero -->
+      <div v-else class="no-cars-message">
+        <p>No hay autos en el parqueadero.</p>
+      </div>
     </div>
   </div>
 </template>
@@ -149,6 +151,7 @@ export default {
 .parking-lot {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* Ajusta el número de columnas según tus necesidades */
+  border-radius: 5px;
   gap: 15px;
   padding: 20px;
   background-color: #2c2c2c; /* Fondo oscuro para simular asfalto */
