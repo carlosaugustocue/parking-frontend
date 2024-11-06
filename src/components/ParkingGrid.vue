@@ -44,6 +44,7 @@ export default {
       try {
         const response = await fetch('http://localhost:8080/api/vehiculos');
         const data = await response.json();
+        console.log('Estado del parqueadero:', data);
         spaces.value = data.map((vehiculo, index) => ({
           index,
           placa: vehiculo.placa || null,
