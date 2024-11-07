@@ -77,7 +77,9 @@ export default {
       if (space.occupied) {
         Swal.fire({
           title: '¿Registrar salida?',
-          html: `¿Deseas registrar la salida del vehículo con placa <span class="badge bg-warning text-dark">${space.placa}</span>?`,
+          html: `
+    <p>¿Deseas registrar la salida del vehículo con placa <span class="placa-salida">${space.placa}</span>?</p>
+  `,
           icon: 'warning',
           showCancelButton: true,
           confirmButtonText: 'Sí, registrar salida',
@@ -91,18 +93,22 @@ export default {
               if (!response.ok) throw new Error('Error al procesar la salida del vehículo.');
 
               const data = await response.json();
+              const currentDateTime = new Date();
+              const formattedDate = currentDateTime.toLocaleDateString('es-ES') + ' ' + currentDateTime.toLocaleTimeString();
 
               // Mostrar la factura en el SweetAlert
               Swal.fire({
                 title: 'Salida registrada',
                 html: `
                   <div class="invoice">
-                    <h3>Factura de Salida</h3>
-                    <p><strong>Placa:</strong><span class="badge bg-warning text-dark">${data.placa}</span>
-</p>
+                    <h3 class="invoice-title">Factura Venta</h3>
+                    <p class="invoice-number">ID: ${data.facturaId || 'kk720'}</p>
+                    <p class="invoice-date">Fecha: ${formattedDate}</p>
+
+                    <p><strong>Placa:</strong> <span class="placa-salida">${data.placa}</span></p>
                     <p><strong>Tipo de Vehículo:</strong> ${space.tipoVehiculo}</p>
                     <p><strong>Hora de Ingreso:</strong> ${space.horaIngreso}</p>
-                    <p><strong>Hora de Salida:</strong> ${new Date().toLocaleTimeString()}</p>
+                    <p><strong>Hora de Salida:</strong> ${currentDateTime.toLocaleTimeString()}</p>
                     <p><strong>Costo Total:</strong> ${data.costoTotal}</p>
                   </div>
                 `,
@@ -144,16 +150,16 @@ export default {
 <style scoped>
 .parking-lot {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Ajusta el número de columnas según tus necesidades */
+  grid-template-columns: repeat(4, 1fr);
   border-radius: 5px;
   gap: 15px;
   padding: 20px;
-  background-color: #2c2c2c; /* Fondo oscuro para simular asfalto */
+  background-color: #2c2c2c;
 }
 
 .parking-space {
   width: 100%;
-  aspect-ratio: 1 / 1; /* Mantiene el espacio cuadrado */
+  aspect-ratio: 1 / 1;
   background-color: #444;
   display: flex;
   align-items: center;
@@ -162,12 +168,12 @@ export default {
   border-radius: 5px;
   overflow: hidden;
   cursor: pointer;
-  position: relative; /* Necesario para posicionar la placa sobre la imagen */
+  position: relative;
 }
 
 .plate, .type {
   position: absolute;
-  top: 5px; /* Ajusta para posicionar sobre la imagen */
+  top: 5px;
   left: 50%;
   transform: translateX(-50%);
   color: white;
@@ -182,7 +188,7 @@ export default {
 }
 
 .vehicle-image {
-  width: 50%; /* Ajusta el tamaño de la imagen dentro del contenedor */
+  width: 50%;
   height: auto;
   object-fit: contain;
 }
@@ -201,15 +207,17 @@ export default {
   margin-top: 20px;
 }
 
-/* Estilo de la factura para SweetAlert */
 .invoice {
-  text-align: left;
-  border: 1px dashed #333;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  width: 250px;
+  margin: 0 auto;
   padding: 15px;
-  font-family: 'Courier New', monospace;
-  font-size: 0.9rem;
-  line-height: 1.6;
-  background-color: #f9f9f9;
-  border-radius: 5px;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #ddd;
+  line-height: 1.5;
+  text-align: center;
 }
+
 </style>
