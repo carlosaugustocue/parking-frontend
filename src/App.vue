@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
     <div class="container-fluid">
       <router-link to="/" class="navbar-brand"><h1 id="principal-title">Parqueadero</h1></router-link>
       <button

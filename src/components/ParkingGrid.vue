@@ -1,5 +1,9 @@
 <template>
   <div class="container">
+    <p>
+      Ocupados: <span class="bg-warning p-1 rounded">{{ occupiedSpacesCount }}</span>, 
+      Restantes: <span class="bg-warning p-1 rounded">{{ 10 - occupiedSpacesCount }}</span>
+    </p>
     <div>
       <div v-if="hasOccupiedSpaces" class="parking-lot">
         <div
@@ -30,7 +34,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import Swal from 'sweetalert2';
 import CarImage from '@/assets/car_top_view.png';
 import MotorcycleImage from '@/assets/motorcycle_top_view.png';
@@ -41,7 +45,6 @@ export default {
   setup() {
     const spaces = ref([]);
     const hasOccupiedSpaces = ref(false);
-
     const fetchParkingStatus = async () => {
       try {
         const response = await fetch('http://localhost:8080/api/vehiculos');
@@ -142,7 +145,11 @@ export default {
       fetchParkingStatus();
     });
 
-    return { spaces, hasOccupiedSpaces, handleClick, getVehicleImage };
+    const occupiedSpacesCount = computed(() => {
+      return spaces.value.filter(space => space.occupied).length;
+    });
+
+    return { spaces, hasOccupiedSpaces, handleClick, getVehicleImage, occupiedSpacesCount };
   }
 };
 </script>
