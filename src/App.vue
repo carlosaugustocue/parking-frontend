@@ -53,7 +53,7 @@ export default {
 }
 
 .navbar {
-  background-color: #778da9;
+  background-color: #181818;
   margin-bottom: 10px;
   padding: 20px;
 }
