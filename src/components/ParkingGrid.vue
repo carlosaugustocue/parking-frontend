@@ -68,23 +68,18 @@ export default {
 
     const getVehicleImage = (tipoVehiculo) => {
       switch (tipoVehiculo.toLowerCase()) {
-        case 'carro':
-          return Car;
         case 'automovil':
-          case 'auto':
-            return Hatchback;
-        case 'camioneta': 
-          case 'suv':
-            return Suv;
+          return Hatchback;
+        case 'camioneta':
+          return Suv;
         case 'moto':
           return Motorcycle;
         case 'scooter':
           return Scooter;
         case 'taxi':
           return Taxi;
-        case 'mula': 
-          case 'camion':
-            return Truck;
+        case 'camion':
+          return Truck;
         default:
           return Car;
       }
