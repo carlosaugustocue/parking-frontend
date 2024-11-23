@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <p>
-      Ocupados: <span class="bg-warning p-1 rounded">{{ occupiedSpacesCount }}</span>, 
-      Restantes: <span class="bg-warning p-1 rounded">{{ 10 - occupiedSpacesCount }}</span>
+    <p class="info-parqueadero">
+      Ocupados: <span class="span-ocupados p-1 rounded">{{ occupiedSpacesCount }}</span> -
+      Restantes: <span class="span-restantes p-1 rounded ">{{ 10 - occupiedSpacesCount }}</span>
     </p>
     <div>
       <div v-if="hasOccupiedSpaces" class="parking-lot">
@@ -13,7 +13,7 @@
           @click="handleClick(space)"
         >
           <div v-if="space.occupied" class="vehicle-info">
-            <p class="plate">{{ space.placa }}</p>
+            <p class="plate">•{{ space.placa }}•</p>
             <p class="type">{{ space.tipoVehiculo }}</p>
             <img
               :src="getVehicleImage(space.tipoVehiculo)"
@@ -36,10 +36,13 @@
 <script>
 import { ref, onMounted, computed } from 'vue';
 import Swal from 'sweetalert2';
-import CarImage from '@/assets/car_top_view.png';
-import MotorcycleImage from '@/assets/motorcycle_top_view.png';
-import TruckImage from '@/assets/truck_top_view.png';
-import DefaultImage from '@/assets/default_vehicle_top_view.png';
+import Car from '@/assets/carro.png';
+import Hatchback from '@/assets/automovil.png';
+import Suv from '@/assets/camioneta.png';
+import Motorcycle from '@/assets/moto.png';
+import Scooter from '@/assets/scooter.png';
+import Taxi from '@/assets/taxi.png';
+import Truck from '@/assets/truck.png';
 
 export default {
   setup() {
@@ -66,13 +69,24 @@ export default {
     const getVehicleImage = (tipoVehiculo) => {
       switch (tipoVehiculo.toLowerCase()) {
         case 'carro':
-          return CarImage;
+          return Car;
+        case 'automovil':
+          case 'auto':
+            return Hatchback;
+        case 'camioneta': 
+          case 'suv':
+            return Suv;
         case 'moto':
-          return MotorcycleImage;
-        case 'camion':
-          return TruckImage;
+          return Motorcycle;
+        case 'scooter':
+          return Scooter;
+        case 'taxi':
+          return Taxi;
+        case 'mula': 
+          case 'camion':
+            return Truck;
         default:
-          return DefaultImage;
+          return Car;
       }
     };
 
@@ -81,12 +95,16 @@ export default {
         Swal.fire({
           title: '¿Registrar salida?',
           html: `
-    <p>¿Deseas registrar la salida del vehículo con placa <span class="placa-salida">${space.placa}</span>?</p>
-  `,
+          <p>¿Deseas registrar la salida del vehículo con placa <span class="placa-salida">${space.placa}</span>?</p>
+          `,
           icon: 'warning',
+          iconColor: '#D00000',
           showCancelButton: true,
           confirmButtonText: 'Sí, registrar salida',
-          cancelButtonText: 'Cancelar'
+          confirmButtonColor: '#2b9348',
+          cancelButtonText: 'Cancelar',
+          cancelButtonColor: '#D00000',
+          color: '#161a1d'
         }).then(async (result) => {
           if (result.isConfirmed) {
             try {
@@ -116,7 +134,10 @@ export default {
                   </div>
                 `,
                 icon: 'success',
-                confirmButtonText: 'Aceptar'
+                iconColor: '#70e000',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#3742FA',
+                color: '#161a1d'
               });
 
               fetchParkingStatus();
@@ -155,27 +176,52 @@ export default {
 </script>
 
 <style scoped>
+/* Nuevos estilos */
+.info-parqueadero {
+  margin: 20px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.span-ocupados {
+  background-color: #d00000;
+  font-weight: 700;
+  color: #fff;
+}
+
+.span-restantes {
+  background-color: #38b000;
+  font-weight: 700;
+  color: #fff;
+}
+
 .parking-lot {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   border-radius: 5px;
-  gap: 15px;
+  gap: 20px;
   padding: 20px;
-  background-color: #2c2c2c;
+  background-color: transparent;
 }
 
 .parking-space {
   width: 100%;
   aspect-ratio: 1 / 1;
-  background-color: #444;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3px solid #fff;
-  border-radius: 5px;
+  border-right: 5px dashed  #000;
+  border-left: 5px dashed #000;
+  border: 1px 0 1px 0;
   overflow: hidden;
   cursor: pointer;
   position: relative;
+}
+
+.vehicle-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .plate, .type {
@@ -183,22 +229,34 @@ export default {
   top: 5px;
   left: 50%;
   transform: translateX(-50%);
-  color: white;
-  font-size: 0.8rem;
-  background-color: rgba(0, 0, 0, 0.6);
+  font-weight: 700;
   padding: 2px 5px;
   border-radius: 3px;
 }
 
+.plate {
+  background-color: #ffdd00;
+  border: 1px solid #161a1d;
+  color: #161a1d;
+  font-size: 16px;
+}
+
 .type {
-  top: 25px;
+  top: 34px;
+  color: #fff;
+  font-size: 14px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border: none;
 }
 
 .vehicle-image {
-  width: 50%;
-  height: auto;
+  width: 90%;
+  padding: 10px;
+  display: flex;
   object-fit: contain;
 }
+
+/* Seccion hasta vehiculos grid */
 
 .empty-space {
   color: #28a745;
@@ -209,19 +267,16 @@ export default {
 
 .no-cars-message {
   text-align: center;
-  color: #6c757d;
+  color: #8d99ae;
   font-size: 1.5rem;
-  margin-top: 20px;
 }
 
 .invoice {
-  font-family: Arial, sans-serif;
   font-size: 14px;
   width: 250px;
   margin: 0 auto;
   padding: 15px;
   background-color: #fff;
-  color: #000;
   border: 1px solid #ddd;
   line-height: 1.5;
   text-align: center;

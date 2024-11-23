@@ -1,7 +1,7 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
+  <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
-      <router-link to="/" class="navbar-brand"><h1 id="principal-title">Parqueadero</h1></router-link>
+      <router-link to="/" class="navbar-brand"><h1 id="principal-title">Parking</h1></router-link>
       <button
         class="navbar-toggler"
         type="button"
@@ -22,7 +22,7 @@
             <router-link to="/exit" class="nav-link">Registrar Salida</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/" class="nav-link">Ver Estado del Parqueadero</router-link>
+            <router-link to="/" class="nav-link">Estado del Parqueadero</router-link>
           </li>
         </ul>
       </div>
@@ -38,157 +38,67 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: rubik, Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  /* margin-top: 20px; */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  text-decoration: none;
+  list-style: none;
+  font-family: "Poppins", serif;
+  -webkit-font-smoothing: antialiased; /* Para navegadores basados en WebKit */
+  -moz-osx-font-smoothing: grayscale; /* Para Firefox en macOS */
+}
+
+.navbar {
+  background-color: #778da9;
+  margin-bottom: 10px;
+  padding: 20px;
+}
+
+.nav-link {
+  color: #fff;
 }
 
 /* Estilo para el enlace activo en la navegación */
 .nav-link.router-link-exact-active {
-  color: #42b983 !important;
-  font-weight: bold;
+  color: #332FF6 !important;
+  font-weight: 600;
 }
 
 #principal-title {
-  color: #dfd5d5;
-  font-weight:600;
+  color: #fff;
+  font-weight: 700;
   /* mover hacia la derecha proporcional al contenedor */
   margin-left: 30%;
-  /* Resaltar el texto */
-  text-shadow: 2px 2px 4px #000000; 
 }
 
-.fira-sans-thin {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 100;
-  font-style: normal;
+#navbarNav {
+  margin-right: 5%;
 }
 
-.fira-sans-extralight {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 200;
-  font-style: normal;
-}
-
-.fira-sans-light {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 300;
-  font-style: normal;
-}
-
-.fira-sans-regular {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.fira-sans-medium {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 500;
-  font-style: normal;
-}
-
-.fira-sans-semibold {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 600;
-  font-style: normal;
-}
-
-.fira-sans-bold {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-}
-
-.fira-sans-extrabold {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 800;
-  font-style: normal;
-}
-
-.fira-sans-black {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 900;
-  font-style: normal;
-}
-
-.fira-sans-thin-italic {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 100;
-  font-style: italic;
-}
-
-.fira-sans-extralight-italic {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 200;
-  font-style: italic;
-}
-
-.fira-sans-light-italic {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 300;
-  font-style: italic;
-}
-
-.fira-sans-regular-italic {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 400;
-  font-style: italic;
-}
-
-.fira-sans-medium-italic {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 500;
-  font-style: italic;
-}
-
-.fira-sans-semibold-italic {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 600;
-  font-style: italic;
-}
-
-.fira-sans-bold-italic {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 700;
-  font-style: italic;
-}
-
-.fira-sans-extrabold-italic {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 800;
-  font-style: italic;
-}
-
-.fira-sans-black-italic {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 900;
-  font-style: italic;
-}
+/* Se borraron todos los estilos con nombre Fira-sans */
 
 .placa-salida {
   display: inline-block;
-  padding: 5px 15px;
+  padding: 6px 10px;
   font-weight: bold;
-  font-size: 1.5rem;
-  background-color: #f0c14b; /* Color amarillo como una placa */
-  color: #333; /* Color de texto oscuro */
-  border: 2px solid #333; /* Borde oscuro */
-  border-radius: 5px;
+  font-size: 1.4rem;
+  background-color: #ffdd00; /* Color amarillo como una placa */
+  color: #161a1d; /* Color de texto oscuro */
+  border: 1px solid #161a1d; /* Borde oscuro */
+  border-radius: 5%;
   letter-spacing: 1px;
   text-align: center;
-  font-family: Arial, sans-serif;
 }
 
 .placa-salida::before,
 .placa-salida::after {
   content: "•";
-  margin: 0 5px;
-  color: #333; /* Color de los puntos al lado de la placa */
+  margin: 0 2px;
+  color: #161a1d; /* Color de los puntos al lado de la placa */
 }
 
 </style>
