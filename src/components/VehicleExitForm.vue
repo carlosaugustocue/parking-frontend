@@ -141,6 +141,7 @@ export default {
 .container-form {
     display: flex;
     flex-direction: column;
+    flex-direction: column;
     justify-self: center; /* Centrar en el eje X */
     align-self: center; /* Centrar en el eje Y */
     border: 2px solid #6c757d;
