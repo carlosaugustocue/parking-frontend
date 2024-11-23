@@ -1,43 +1,45 @@
 <template>
 <!-- Estructura nueva ultimo commit front  -->
-<div class="container-form">
-    <form class="form" @submit.prevent="exitVehicle">
-      <h1 class="form-title">Registrar Salida de Vehículo</h1>
+ <div class="home">
+  <div class="container-form">
+      <form class="form" @submit.prevent="exitVehicle">
+        <h1 class="form-title">Registrar Salida de Vehículo</h1>
+            
+            <label for="placa" class="info-inputField">Placa</label>
+              <input
+                v-model="placa"
+                type="text"
+                id="placa"
+                class="inputField"
+                placeholder="Ej: ABC123"
+                required
+              />
           
-          <label for="placa" class="info-inputField">Placa</label>
-            <input
-              v-model="placa"
-              type="text"
-              id="placa"
-              class="inputField"
-              placeholder="Ej: ABC123"
-              required
-            />
-         
-            <div class="form-check">
-            <input
-              type="checkbox"
-              v-model="cobrarPorMinuto"
-              class="form-check-input"
-              id="cobrarPorMinuto"
-            />
-            <label class="info-inputField" for="cobrarPorMinuto">
-              Cobrar por minuto
-            </label>
+              <div class="form-check">
+              <input
+                type="checkbox"
+                v-model="cobrarPorMinuto"
+                class="form-check-input"
+                id="cobrarPorMinuto"
+              />
+              <label class="info-inputField" for="cobrarPorMinuto">
+                Cobrar por minuto
+              </label>
+            </div>
+          <button type="submit" class="form-btn">Registrar Salida</button>
+
+          <!-- Mostrar respuesta después de la salida -->
+        <div v-if="responseData" class="mt-4">
+            <p><strong>Placa:</strong> {{ responseData.placa }}</p>
+            <p><strong>Costo Total:</strong> {{ responseData.costoTotal }}</p>
+            <p><strong>Mensaje:</strong> {{ responseData.mensaje }}</p>
           </div>
-        <button type="submit" class="form-btn">Registrar Salida</button>
 
-        <!-- Mostrar respuesta después de la salida -->
-      <div v-if="responseData" class="mt-4">
-          <p><strong>Placa:</strong> {{ responseData.placa }}</p>
-          <p><strong>Costo Total:</strong> {{ responseData.costoTotal }}</p>
-          <p><strong>Mensaje:</strong> {{ responseData.mensaje }}</p>
-        </div>
-
-        <!-- Mensaje de error -->
-        <p v-if="message" class="mt-3 text-center text-danger">{{ message }}</p>
-      </form>
-  </div>
+          <!-- Mensaje de error -->
+          <p v-if="message" class="mt-3 text-center text-danger">{{ message }}</p>
+        </form>
+    </div>
+</div>
 
   <!-- Anteriores estilos -->
 
@@ -126,8 +128,19 @@ export default {
 <style scoped>
 /* Nuevos estilos */
 
+.home {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%; 
+    min-height: 80vh;
+    align-items: center;
+    justify-content: center;
+}
+
 .container-form {
     display: flex;
+    flex-direction: column;
     flex-direction: column;
     justify-self: center; /* Centrar en el eje X */
     align-self: center; /* Centrar en el eje Y */
@@ -136,7 +149,6 @@ export default {
     background: #fff;
     border-radius: 10px;
     padding: 10px;
-    margin-top: 5%;
   }
 
   .form {

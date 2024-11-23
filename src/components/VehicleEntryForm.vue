@@ -1,5 +1,5 @@
 <template>
-
+<div class="home">
   <div class="container-form">
     <form class="form" @submit.prevent="registerVehicle">
       <h1 class="form-title">Registrar Entrada de Vehículo</h1>
@@ -27,6 +27,7 @@
         <button type="submit" class="form-btn">Registrar</button>
       </form>
   </div>
+</div>
 
   <!-- Anterior codigo HTML -->
 
@@ -104,6 +105,16 @@ export default {
 <style scoped>
 /* Nuevos estilos */
 
+.home {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%; 
+    min-height: 80vh;
+    align-items: center;
+    justify-content: center;
+}
+
 .container-form {
     display: flex;
     flex-direction: column;
@@ -114,7 +125,6 @@ export default {
     background: #fff;
     border-radius: 10px;
     padding: 10px;
-    margin-top: 5%;
   }
 
   .form {
