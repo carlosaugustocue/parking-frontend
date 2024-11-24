@@ -1,7 +1,10 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
-      <router-link to="/" class="navbar-brand"><h1 id="principal-title">Parking</h1></router-link>
+      <!-- Título dinámico del parqueadero -->
+      <router-link to="/" class="navbar-brand">
+        <h1 id="principal-title">{{ nombreParqueadero }}</h1>
+      </router-link>
       <button
         class="navbar-toggler"
         type="button"
@@ -28,12 +31,42 @@
       </div>
     </div>
   </nav>
-  <router-view/>
+  <router-view />
 </template>
 
 <script>
+import { ref, onMounted } from "vue";
+
 export default {
   name: "App",
+  setup() {
+    const nombreParqueadero = ref("Cargando...");
+
+    // Función para obtener el nombre del parqueadero desde el backend
+    const obtenerNombreParqueadero = async () => {
+      try {
+        console.log(`${process.env.VUE_APP_API_BASE_URL}`);
+        console.log(process.env);
+        const response = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/configuracion/nombre-parqueadero`);
+        if (!response.ok) {
+          throw new Error("Error al obtener el nombre del parqueadero.");
+        }
+        const data = await response.json();
+        // Asignar el nombre del parqueadero
+        nombreParqueadero.value = data.nombreParqueadero || "Nombre no disponible";
+      } catch (error) {
+        console.error("Error al cargar el nombre del parqueadero:", error);
+        nombreParqueadero.value = "Error al cargar";
+      }
+    };
+
+    // Cargar el nombre del parqueadero al montar el componente
+    onMounted(obtenerNombreParqueadero);
+
+    return {
+      nombreParqueadero,
+    };
+  },
 };
 </script>
 
@@ -55,7 +88,7 @@ export default {
 .navbar {
   background-color: #181818;
   margin-bottom: 10px;
-  padding: 20px;
+  padding: 3px;
 }
 
 .nav-link {
@@ -72,7 +105,7 @@ export default {
   color: #fff;
   font-weight: 700;
   /* mover hacia la derecha proporcional al contenedor */
-  margin-left: 30%;
+  margin-left: 0%;
 }
 
 #navbarNav {

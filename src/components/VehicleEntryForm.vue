@@ -1,103 +1,79 @@
 <template>
-<div class="home">
-  <div class="container-form">
-    <form class="form" @submit.prevent="registerVehicle">
-      <h1 class="form-title">Registrar Entrada de Vehículo</h1>
-          
-          <label for="placa" class="info-inputField">Placa</label>
-          <input
-            v-model="placa"
-            type="text"
-            id="placa"
-            class="inputField"
-            placeholder="Ej: ABC123"
-            required
-            />
-         
-          <label for="tipoVehiculo" class="info-inputField">Tipo de Vehículo</label>
+  <div class="home">
+    <div class="container-form">
+      <form class="form" @submit.prevent="registerVehicle">
+        <h1 class="form-title">Registrar Entrada de Vehículo</h1>
 
-          <!-- Se agrega select para el tipo de vehiculo -->
+        <!-- Campo para la placa -->
+        <label for="placa" class="info-inputField">Placa</label>
+        <input
+          v-model="placa"
+          type="text"
+          id="placa"
+          class="inputField"
+          placeholder="Ej: ABC123"
+          required
+        />
 
-          <select 
+        <!-- Campo para el tipo de vehículo -->
+        <label for="tipoVehiculo" class="info-inputField">Tipo de Vehículo</label>
+        <select
           v-model="tipoVehiculo"
           id="tipoVehiculo"
           class="inputField"
-          name="criptomoneda"
-          >
-            <option value="" disabled selected required class="option-info">Seleciona el tipo de Vehiculo</option>
-            <option value="automovil">Automovil</option>
-            <option value="camioneta">Camioneta</option>
-            <option value="moto">Moto</option>
-            <option value="scooter">Scooter</option>
-            <option value="camion">Camion</option>
-            <option value="taxi">Taxi</option>
-          </select>
+          required
+        >
+          <option value="" disabled selected>Selecciona el tipo de Vehículo</option>
+          <option v-for="tipo in tiposVehiculo" :key="tipo" :value="tipo">
+            {{ tipo }}
+          </option>
+        </select>
 
-            <!-- <input
-              v-model="tipoVehiculo"
-              type="text"
-              id="tipoVehiculo"
-              class="inputField"
-              placeholder="Ej: Carro, SUV, Moto, Taxi, Mula"
-              required
-            /> -->
-            
-            <p v-if="message" class="mt-3 fs-6 text-center">{{ message }}</p>
+        <!-- Mensaje de estado con spinner -->
+        <div class="feedback-container" v-if="message || cargando">
+          <div class="spinner-feedback" v-if="cargando"></div>
+          <p v-if="!cargando" class="feedback-message">{{ message }}</p>
+        </div>
+
+        <!-- Botón para registrar -->
         <button type="submit" class="form-btn">Registrar</button>
       </form>
-  </div>
-</div>
-
-  <!-- Anterior codigo HTML -->
-
-  <!-- <div class="container">
-    <div class="card mx-auto" style="max-width: 500px;">
-      <div class="card-body">
-        <h2 class="card-title text-center mb-4">Registrar Entrada de Vehículo</h2>
-        <form @submit.prevent="registerVehicle">
-          <div class="mb-3">
-            <label for="placa" class="info-inputField">Placa</label>
-            <input
-              v-model="placa"
-              type="text"
-              id="placa"
-              class="inputField"
-              placeholder="Ej: ABC123"
-              required
-            />
-          </div>
-          <div class="mb-3">
-            <label for="tipoVehiculo" class="info-inputField">Tipo de Vehículo</label>
-            <input
-              v-model="tipoVehiculo"
-              type="text"
-              id="tipoVehiculo"
-              class="inputField"
-              placeholder="Ej: Carro, Moto"
-              required
-            />
-          </div>
-          <button type="submit" class="btn btn-primary w-100">Registrar</button>
-        </form>
-        <p v-if="message" class="mt-3 text-center">{{ message }}</p>
-      </div>
     </div>
-  </div> -->
+  </div>
 </template>
 
 <script>
-import { ref } from 'vue';
-import { mostrarSpinner } from '@/store/spinner';
+import { ref, onMounted } from 'vue';
 
 export default {
   setup() {
     const placa = ref('');
     const tipoVehiculo = ref('');
+    const tiposVehiculo = ref([]); // Lista para los tipos de vehículos
     const message = ref('');
+    const cargando = ref(false); // Control del spinner
 
+    // Función para obtener los tipos de vehículos desde el backend
+    const obtenerTiposVehiculos = async () => {
+      cargando.value = true; // Mostrar el spinner
+      try {
+        const response = await fetch('http://localhost:8080/api/configuracion/tarifas');
+        if (!response.ok) {
+          throw new Error('Error al obtener los tipos de vehículos.');
+        }
+        const data = await response.json();
+        tiposVehiculo.value = data.map((tarifa) => tarifa.tipoVehiculo); // Extraer los tipos de vehículo
+      } catch (error) {
+        console.error('Error al cargar los tipos de vehículos:', error);
+      } finally {
+        cargando.value = false; // Ocultar el spinner
+      }
+    };
+
+    // Función para registrar un vehículo
     const registerVehicle = async () => {
-      message.value = ''; // Cada vez que se de click se regenera el texto
-      mostrarSpinner(); // Spinner que muestra carga
+      cargando.value = true; // Mostrar el spinner
+      message.value = ''; // Limpiar el mensaje de estado
       try {
         const response = await fetch('http://localhost:8080/api/vehiculos/entrada', {
           method: 'POST',
@@ -105,103 +81,146 @@ export default {
           body: JSON.stringify({ placa: placa.value, tipoVehiculo: tipoVehiculo.value }),
         });
         const data = await response.json();
-
-        setTimeout(() => {
-          message.value = data.mensaje; // Deja que el spinner aparezca sin texto y espera hasta nuevo click para quitarse 
-        }, 1000);
-
+        message.value = data.mensaje;
       } catch (error) {
         console.error('Error al registrar el vehículo:', error);
         message.value = 'Error al registrar el vehículo.';
+      } finally {
+        cargando.value = false; // Ocultar el spinner
       }
     };
 
-    return { placa, tipoVehiculo, registerVehicle, message };
-  }
+    // Cargar los tipos de vehículos al montar el componente
+    onMounted(obtenerTiposVehiculos);
+
+    return {
+      placa,
+      tipoVehiculo,
+      tiposVehiculo,
+      registerVehicle,
+      message,
+      cargando,
+    };
+  },
 };
 </script>
 
 <style scoped>
-/* Nuevos estilos */
-
 .home {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    width: 100%; 
-    min-height: 80vh;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%; 
+  min-height: 80vh;
+  align-items: center;
+  justify-content: center;
 }
 
 .container-form {
-    display: flex;
-    flex-direction: column;
-    justify-self: center; /* Centrar en el eje X */
-    align-self: center; /* Centrar en el eje Y */
-    border: 2px solid #6c757d;
-    width: 500px;
-    background: #fff;
-    border-radius: 10px;
-    padding: 10px;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-self: center; /* Centrar en el eje X */
+  align-self: center; /* Centrar en el eje Y */
+  border: 2px solid #6c757d;
+  width: 500px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px;
+}
 
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin: 20px 20px;
-    margin-bottom: 10px;
-    padding: 20px;
-  }
-  
-  .form-title {
-    font-size: 30px;
-    font-weight: 700;
-    text-align: center;
-    color: #212529;
-  }
-  
-  .info-inputField {
-    color: #212529;
-    font-weight: 600;
-    font-size: 18px;
-  }
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 20px 20px;
+  margin-bottom: 10px;
+  padding: 20px;
+}
 
-  .inputField {
-    padding: 15px 20px;
-    width: 100%;
-    border: 1px solid #6c757d;
-    border-radius: 10px;
-    font-size: 18px;
-    color: #000;
-    transition: all 0.3s ease; /* Animación suave */
-  }
+.form-title {
+  font-size: 30px;
+  font-weight: 700;
+  text-align: center;
+  color: #212529;
+}
 
-  .inputField::placeholder {
-    color: #6c757d;
-    font-style: oblique;
-  }
-  
-  .form-btn {
-    width: 100%;
-    background-color: #332FF6;
-    color: #fff;
-    border: none;
-    outline: none;
-    border-radius: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, .4);
-    cursor: pointer;
-    font-size: 15px;
-    font-weight: 700;
-    margin: 10px 0 0 auto;
-    padding: 15px;
-    transition: all 0.3s ease;
-  }
+.info-inputField {
+  color: #212529;
+  font-weight: 600;
+  font-size: 18px;
+}
 
-  .form-btn:hover {
-    background-color: rgba(51, 47, 246, 0.9);
-    transform: scale(1.01);
+.inputField {
+  padding: 15px 20px;
+  width: 100%;
+  border: 1px solid #6c757d;
+  border-radius: 10px;
+  font-size: 18px;
+  color: #000;
+  transition: all 0.3s ease; /* Animación suave */
+}
+
+.inputField::placeholder {
+  color: #6c757d;
+  font-style: oblique;
+}
+
+.form-btn {
+  width: 100%;
+  background-color: #332FF6;
+  color: #fff;
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+  margin: 10px 0 0 auto;
+  padding: 15px;
+  transition: all 0.3s ease;
+}
+
+.form-btn:hover {
+  background-color: rgba(51, 47, 246, 0.9);
+  transform: scale(1.01);
+}
+.feedback-container {
+  position: relative;
+  /* border: 2px solid red; */
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 10px;
+  text-align: center;
+  min-height: 50px;
+}
+
+.feedback-message {
+  font-size: 16px;
+  color: #212529;
+}
+
+.spinner-feedback {
+  border: 4px solid #f3f3f3; /* Gris claro */
+  border-top: 4px solid #332FF6; /* Azul */
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 
 </style>
