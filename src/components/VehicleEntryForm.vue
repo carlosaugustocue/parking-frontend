@@ -15,14 +15,33 @@
             />
          
           <label for="tipoVehiculo" class="info-inputField">Tipo de Vehículo</label>
-            <input
+
+          <!-- Se agrega select para el tipo de vehiculo -->
+
+          <select 
+          v-model="tipoVehiculo"
+          id="tipoVehiculo"
+          class="inputField"
+          name="criptomoneda"
+          >
+            <option value="" disabled selected required class="option-info">Seleciona el tipo de Vehiculo</option>
+            <option value="automovil">Automovil</option>
+            <option value="camioneta">Camioneta</option>
+            <option value="moto">Moto</option>
+            <option value="scooter">Scooter</option>
+            <option value="camion">Camion</option>
+            <option value="taxi">Taxi</option>
+          </select>
+
+            <!-- <input
               v-model="tipoVehiculo"
               type="text"
               id="tipoVehiculo"
               class="inputField"
               placeholder="Ej: Carro, SUV, Moto, Taxi, Mula"
               required
-            />
+            /> -->
+            
             <p v-if="message" class="mt-3 fs-6 text-center">{{ message }}</p>
         <button type="submit" class="form-btn">Registrar</button>
       </form>
@@ -145,7 +164,7 @@ export default {
   
   .info-inputField {
     color: #212529;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 18px;
   }
 
