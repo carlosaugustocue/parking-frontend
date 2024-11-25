@@ -29,23 +29,30 @@
           </option>
         </select>
 
-        <!-- Mensaje de estado con spinner -->
-        <div class="feedback-container" v-if="message || cargando">
-          <div class="spinner-feedback" v-if="cargando"></div>
-          <p v-if="!cargando" class="feedback-message">{{ message }}</p>
+        <!-- Mensaje de estado -->
+        <div class="feedback-container" v-if="message">
+          <p class="feedback-message">{{ message }}</p>
         </div>
 
         <!-- Botón para registrar -->
         <button type="submit" class="form-btn">Registrar</button>
       </form>
     </div>
+
+    <!-- Spinner global -->
+    <loading v-model:active="cargando" :is-full-page="true" color="#332FF6" />
   </div>
 </template>
 
 <script>
 import { ref, onMounted } from 'vue';
+import Loading from 'vue-loading-overlay'; // Importa el componente
+import 'vue-loading-overlay/dist/css/index.css'; // Importa los estilos
 
 export default {
+  components: {
+    Loading, // Registra el componente
+  },
   setup() {
     const placa = ref('');
     const tipoVehiculo = ref('');
@@ -106,11 +113,12 @@ export default {
 </script>
 
 <style scoped>
+/* Mantén los estilos existentes */
 .home {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  width: 100%; 
+  width: 100%;
   min-height: 80vh;
   align-items: center;
   justify-content: center;
@@ -119,8 +127,8 @@ export default {
 .container-form {
   display: flex;
   flex-direction: column;
-  justify-self: center; /* Centrar en el eje X */
-  align-self: center; /* Centrar en el eje Y */
+  justify-self: center;
+  align-self: center;
   border: 2px solid #6c757d;
   width: 500px;
   background: #fff;
@@ -144,6 +152,24 @@ export default {
   color: #212529;
 }
 
+.inputField {
+  padding: 15px 20px;
+  width: 100%;
+  border: 1px solid #6c757d;
+  border-radius: 10px;
+  font-size: 18px;
+  color: #000;
+}
+
+.feedback-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.feedback-message {
+  font-size: 16px;
+  color: #212529;
+}
 .info-inputField {
   color: #212529;
   font-weight: 600;
@@ -221,6 +247,7 @@ export default {
     transform: rotate(360deg);
   }
 }
+
 
 
 </style>

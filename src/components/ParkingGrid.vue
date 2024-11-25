@@ -1,9 +1,15 @@
 <template>
   <div class="container">
+    <!-- Spinner de vue-loading-overlay -->
+    <loading v-model:active="cargando" :is-full-page="true" color="#332FF6" />
+
     <p class="info-parqueadero">
-      Ocupados: <span class="span-ocupados p-1 rounded">{{ occupiedSpacesCount }}</span> -
-      Restantes: <span class="span-restantes p-1 rounded ">{{ 10 - occupiedSpacesCount }}</span>
+      Ocupados:
+      <span class="span-ocupados p-1 rounded">{{ occupiedSpacesCount }}</span> -
+      Restantes:
+      <span class="span-restantes p-1 rounded ">{{ 10 - occupiedSpacesCount }}</span>
     </p>
+
     <div>
       <div v-if="hasOccupiedSpaces" class="parking-lot">
         <div
@@ -34,91 +40,112 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from 'vue';
-import Swal from 'sweetalert2';
-import Car from '@/assets/carro.png';
-import Hatchback from '@/assets/automovil.png';
-import Suv from '@/assets/camioneta.png';
-import Motorcycle from '@/assets/moto.png';
-import Scooter from '@/assets/scooter.png';
-import Taxi from '@/assets/taxi.png';
-import Truck from '@/assets/truck.png';
+import { ref, onMounted, computed } from "vue";
+import Loading from "vue-loading-overlay"; // Importar el componente
+import "vue-loading-overlay/dist/css/index.css"; // Importar los estilos
+import Swal from "sweetalert2";
+import Car from "@/assets/carro.png";
+import Hatchback from "@/assets/automovil.png";
+import Suv from "@/assets/camioneta.png";
+import Motorcycle from "@/assets/moto.png";
+import Scooter from "@/assets/scooter.png";
+import Taxi from "@/assets/taxi.png";
+import Truck from "@/assets/truck.png";
 
 export default {
+  components: {
+    Loading, // Registrar el componente
+  },
   setup() {
     const spaces = ref([]);
     const hasOccupiedSpaces = ref(false);
+    const cargando = ref(false); // Control del spinner
+
+    // Función para obtener el estado del parqueadero
     const fetchParkingStatus = async () => {
+      cargando.value = true; // Mostrar el spinner
       try {
-        const response = await fetch('http://localhost:8080/api/vehiculos');
+        const response = await fetch("http://localhost:8080/api/vehiculos");
         const data = await response.json();
         spaces.value = data.map((vehiculo, index) => ({
           index,
           placa: vehiculo.placa || null,
-          tipoVehiculo: vehiculo.tipoVehiculo || 'Desconocido',
+          tipoVehiculo: vehiculo.tipoVehiculo || "Desconocido",
           horaIngreso: vehiculo.horaIngreso || null,
           occupied: !!vehiculo.placa,
         }));
 
-        hasOccupiedSpaces.value = spaces.value.some(space => space.occupied);
+        hasOccupiedSpaces.value = spaces.value.some((space) => space.occupied);
       } catch (error) {
-        console.error('Error al obtener el estado del parqueadero:', error);
+        console.error("Error al obtener el estado del parqueadero:", error);
+      } finally {
+        cargando.value = false; // Ocultar el spinner
       }
     };
 
+    // Función para obtener la imagen del vehículo
     const getVehicleImage = (tipoVehiculo) => {
       switch (tipoVehiculo.toLowerCase()) {
-        case 'automovil':
+        case "automovil":
           return Hatchback;
-        case 'camioneta':
+        case "camioneta":
           return Suv;
-        case 'moto':
+        case "moto":
           return Motorcycle;
-        case 'scooter':
+        case "scooter":
           return Scooter;
-        case 'taxi':
+        case "taxi":
           return Taxi;
-        case 'camion':
+        case "camion":
           return Truck;
         default:
           return Car;
       }
     };
 
+    // Función para manejar clics en los espacios del parqueadero
     const handleClick = async (space) => {
       if (space.occupied) {
         Swal.fire({
-          title: '¿Registrar salida?',
-          html: `
-          <p>¿Deseas registrar la salida del vehículo con placa <span class="placa-salida">${space.placa}</span>?</p>
-          `,
-          icon: 'warning',
-          iconColor: '#D00000',
+          title: "¿Registrar salida?",
+          html: `<p>¿Deseas registrar la salida del vehículo con placa <span class="placa-salida">${space.placa}</span>?</p>`,
+          icon: "warning",
+          iconColor: "#D00000",
           showCancelButton: true,
-          confirmButtonText: 'Sí, registrar salida',
-          confirmButtonColor: '#2b9348',
-          cancelButtonText: 'Cancelar',
-          cancelButtonColor: '#D00000',
-          color: '#161a1d'
+          confirmButtonText: "Sí, registrar salida",
+          confirmButtonColor: "#2b9348",
+          cancelButtonText: "Cancelar",
+          cancelButtonColor: "#D00000",
+          color: "#161a1d",
         }).then(async (result) => {
           if (result.isConfirmed) {
+            cargando.value = true; // Mostrar el spinner
             try {
-              const response = await fetch(`http://localhost:8080/api/vehiculos/salida/${space.placa}?cobrarPorMinuto=false`, {
-                method: 'PUT'
-              });
-              if (!response.ok) throw new Error('Error al procesar la salida del vehículo.');
+              const response = await fetch(
+                `http://localhost:8080/api/vehiculos/salida/${space.placa}?cobrarPorMinuto=false`,
+                {
+                  method: "PUT",
+                }
+              );
+              if (!response.ok)
+                throw new Error(
+                  "Error al procesar la salida del vehículo."
+                );
 
               const data = await response.json();
               const currentDateTime = new Date();
-              const formattedDate = currentDateTime.toLocaleDateString('es-ES') + ' ' + currentDateTime.toLocaleTimeString();
+              const formattedDate =
+                currentDateTime.toLocaleDateString("es-ES") +
+                " " +
+                currentDateTime.toLocaleTimeString();
 
               // Mostrar la factura en el SweetAlert
               Swal.fire({
-                title: 'Salida registrada',
+                title: "Salida registrada",
                 html: `
                   <div class="invoice">
                     <h3 class="invoice-title">Factura Venta</h3>
-                    <p class="invoice-number">ID: ${data.facturaId || 'kk720'}</p>
+                    <p class="invoice-number">ID: ${data.facturaId || "kk720"}</p>
                     <p class="invoice-date">Fecha: ${formattedDate}</p>
 
                     <p><strong>Placa:</strong> <span class="placa-salida">${data.placa}</span></p>
@@ -128,31 +155,33 @@ export default {
                     <p><strong>Costo Total:</strong> ${data.costoTotal}</p>
                   </div>
                 `,
-                icon: 'success',
-                iconColor: '#70e000',
-                confirmButtonText: 'Aceptar',
-                confirmButtonColor: '#3742FA',
-                color: '#161a1d'
+                icon: "success",
+                iconColor: "#70e000",
+                confirmButtonText: "Aceptar",
+                confirmButtonColor: "#3742FA",
+                color: "#161a1d",
               });
 
               fetchParkingStatus();
             } catch (error) {
-              console.error('Error al registrar la salida:', error);
+              console.error("Error al registrar la salida:", error);
               Swal.fire({
-                title: 'Error',
-                text: 'Ocurrió un error al procesar la salida del vehículo.',
-                icon: 'error',
-                confirmButtonText: 'Aceptar'
+                title: "Error",
+                text: "Ocurrió un error al procesar la salida del vehículo.",
+                icon: "error",
+                confirmButtonText: "Aceptar",
               });
+            } finally {
+              cargando.value = false; // Ocultar el spinner
             }
           }
         });
       } else {
         Swal.fire({
-          title: 'Espacio libre',
-          text: 'Este espacio está libre.',
-          icon: 'info',
-          confirmButtonText: 'Aceptar'
+          title: "Espacio libre",
+          text: "Este espacio está libre.",
+          icon: "info",
+          confirmButtonText: "Aceptar",
         });
       }
     };
@@ -162,14 +191,20 @@ export default {
     });
 
     const occupiedSpacesCount = computed(() => {
-      return spaces.value.filter(space => space.occupied).length;
+      return spaces.value.filter((space) => space.occupied).length;
     });
 
-    return { spaces, hasOccupiedSpaces, handleClick, getVehicleImage, occupiedSpacesCount };
-  }
+    return {
+      spaces,
+      hasOccupiedSpaces,
+      handleClick,
+      getVehicleImage,
+      occupiedSpacesCount,
+      cargando, // Control del spinner
+    };
+  },
 };
 </script>
-
 <style scoped>
 /* Nuevos estilos */
 .info-parqueadero {

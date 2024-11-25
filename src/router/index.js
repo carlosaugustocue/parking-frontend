@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import EntryView from '../views/EntryView.vue';
 import ExitView from '../views/ExitView.vue';
+import ParkingConfigurationView from '../views/ParkingConfigurationView.vue';
 
 const routes = [
   {
@@ -16,6 +17,8 @@ const routes = [
   },
   { path: '/entry', name: 'Entry', component: EntryView },
   { path: '/exit', name: 'Exit', component: ExitView },
+  { path: '/configuration', name: 'Configuration', component: ParkingConfigurationView },
+  
 ];
 
 const router = createRouter({
