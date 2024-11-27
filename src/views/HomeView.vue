@@ -4,17 +4,21 @@
     <ParkingGrid @showInvoice="displayInvoice" />
     <Invoice v-if="invoiceData" :invoiceData="invoiceData" />
   </div>
+
+  <AdAside/>
 </template>
 
 <script>
 import { ref } from 'vue';
 import ParkingGrid from '../components/ParkingGrid.vue';
 import Invoice from '../components/VehicleInvoice.vue';
+import AdAside from '@/components/AdAside.vue';
 
 export default {
   components: {
     ParkingGrid,
-    Invoice
+    Invoice,
+    AdAside
   },
   setup() {
     const invoiceData = ref(null);

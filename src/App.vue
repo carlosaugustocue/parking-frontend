@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg ">
       <div class="container-fluid">
         <!-- Título dinámico del parqueadero -->
         <router-link to="/" class="navbar-brand">
@@ -104,13 +104,15 @@ export default {
 
 
 .navbar {
-  background-color: #181818;
+  background-color: #fff;
   margin-bottom: 10px;
-  padding: 3px;
+  padding: 10px;
+  box-shadow: #161a1d;
+  box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.5);
 }
 
 .nav-link {
-  color: #fff;
+  color: #181818;
 }
 
 /* Estilo para el enlace activo en la navegación */
@@ -120,7 +122,7 @@ export default {
 }
 
 #principal-title {
-  color: #fff;
+  color: #181818;
   font-weight: 700;
   /* mover hacia la derecha proporcional al contenedor */
   margin-left: 0%;

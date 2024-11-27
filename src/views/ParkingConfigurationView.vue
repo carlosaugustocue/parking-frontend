@@ -1,15 +1,18 @@
 <template>
   <div>
-    <VehicleExitForm />
+    <ParkingConfiguration />
+    <AdAside></AdAside>
   </div>
 </template>
 
 <script>
-import VehicleExitForm from '../components/ParkingConfiguration.vue';
+import ParkingConfiguration from '../components/ParkingConfiguration.vue';
+import AdAside from '../components/AdAside.vue';
 
 export default {
   components: {
-    VehicleExitForm
+    ParkingConfiguration,
+    AdAside
   }
 };
 </script>

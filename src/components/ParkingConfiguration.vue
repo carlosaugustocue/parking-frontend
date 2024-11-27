@@ -35,12 +35,12 @@
                         <input v-model.number="tipo.tarifaMinuto" type="number" class="inputField"
                             placeholder="Tarifa por Minuto" />
                     </td>
-                    <td>
-                        <button @click="saveVehicleType(index)" class="btn btn-save">
-                            Guardar
-                        </button>
+                    <td class="guardar-eliminar">
                         <button @click="deleteVehicleType(index)" class="btn btn-delete">
-                            Eliminar
+                            X
+                        </button>
+                        <button @click="saveVehicleType(index)" class="btn btn-save">
+                            ✔
                         </button>
                     </td>
                 </tr>
@@ -189,6 +189,7 @@ export default {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
+    padding-bottom: 0;
     border: 1px solid #ddd;
     border-radius: 10px;
     background-color: #f9f9f9;
@@ -204,6 +205,8 @@ export default {
 .config-subtitle {
     font-size: 20px;
     margin: 20px 0 10px;
+    text-align: center;
+    font-weight: 700;
 }
 
 .form-group {
@@ -234,6 +237,10 @@ export default {
     border: 1px solid #ddd;
 }
 
+th {
+    color: #3742FA;
+}
+
 .btn {
     padding: 8px 12px;
     border: none;
@@ -243,19 +250,44 @@ export default {
 }
 
 .btn-save {
-    background-color: #28a745;
+    background-color: #38b000;
     color: #fff;
+    transition: .3s all ease;
+}
+
+.btn-save:hover {
+    background-color: rgba(56, 176, 0, .8);
+    transform: scale(1.025);
 }
 
 .btn-delete {
-    background-color: #dc3545;
+    background-color: #D00000;
     color: #fff;
+    transition: .3s all ease;
+}
+
+.btn-delete:hover {
+    background-color: rgba(208, 0, 0, .8);
+    transform: scale(1.025);
+}
+
+.guardar-eliminar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
 .btn-add {
-    background-color: #007bff;
+    background-color: #3742FA;
     color: #fff;
-    margin-top: 10px;
+    margin-top: 0;
+    margin-left: 15px;
+}
+
+.btn-add:hover {
+    background-color: rgba(55, 66, 250, .8);
 }
 
 .btn:hover {
