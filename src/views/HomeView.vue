@@ -1,11 +1,19 @@
 <template>
-  <div class="home-view">
-    <h1 class="title-home">Estado del Parqueadero</h1>
-    <ParkingGrid @showInvoice="displayInvoice" />
-    <Invoice v-if="invoiceData" :invoiceData="invoiceData" />
-  </div>
+  <div class="container-fluid mt-4">
+    <div class="row">
+      <!-- Componente AdAside -->
+      <div class="col-12 col-lg-3 mb-4">
+        <AdAside />
+      </div>
 
-  <AdAside/>
+      <!-- Contenido principal: ParkingGrid e Invoice -->
+      <div class="col-12 col-lg-9">
+        <h1 class="title-home mb-4">Estado del Parqueadero</h1>
+        <ParkingGrid @showInvoice="displayInvoice" />
+        <Invoice v-if="invoiceData" :invoiceData="invoiceData" class="mt-4" />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -33,13 +41,7 @@ export default {
 </script>
 
 <style scoped>
-.home-view {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.title-home{
+.title-home {
   font-weight: 700;
   font-size: 35px;
   text-align: center;

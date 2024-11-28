@@ -43,7 +43,7 @@
               </td>
               <td>
                 <input
-                  v-model.number="tipo.tarifaHora"
+                  v-model.number="tipo.precioPorHora"
                   type="number"
                   class="form-control"
                   placeholder="Tarifa por Hora"
@@ -51,7 +51,7 @@
               </td>
               <td>
                 <input
-                  v-model.number="tipo.tarifaMinuto"
+                  v-model.number="tipo.precioPorMinuto"
                   type="number"
                   class="form-control"
                   placeholder="Tarifa por Minuto"
