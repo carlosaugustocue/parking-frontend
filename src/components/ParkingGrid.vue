@@ -108,7 +108,8 @@ export default {
       if (space.occupied) {
         Swal.fire({
           title: "¿Registrar salida?",
-          html: `<p>¿Deseas registrar la salida del vehículo con placa <span class="placa-salida">${space.placa}</span>?</p>`,
+          html: `<p>¿Deseas registrar la salida del vehículo?</p>
+            <p><span class="placa-salida">${space.placa}</span></p>`,
           icon: "warning",
           iconColor: "#D00000",
           showCancelButton: true,
