@@ -3,6 +3,9 @@ import HomeView from '../views/HomeView.vue';
 import EntryView from '../views/EntryView.vue';
 import ExitView from '../views/ExitView.vue';
 import ParkingConfigurationView from '../views/ParkingConfigurationView.vue';
+import ParkingMapsView  from '../views/ParkingMapsView.vue';
+import HeroSectionView  from '../views/HeroSectionView.vue';
+import ApiStatisticsView  from '../views/ApiStatisticsView.vue';
 
 const routes = [
   {
@@ -18,6 +21,9 @@ const routes = [
   { path: '/entry', name: 'Entry', component: EntryView },
   { path: '/exit', name: 'Exit', component: ExitView },
   { path: '/configuration', name: 'Configuration', component: ParkingConfigurationView },
+  { path: '/maps', name: 'Maps', component: ParkingMapsView },
+  { path: '/hero', name: 'Hero', component: HeroSectionView },
+  { path: '/statistics', name: 'statistics', component: ApiStatisticsView },
   
 ];
 

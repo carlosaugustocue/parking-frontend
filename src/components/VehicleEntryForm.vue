@@ -40,64 +40,69 @@
     </div>
 
     <!-- Spinner global -->
-    <loading v-model:active="cargando" :is-full-page="true" color="#332FF6" />
+    <loading v-model:active="cargando" :is-full-page="true" color="#0072ff" />
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
-import Loading from 'vue-loading-overlay'; // Importa el componente
-import 'vue-loading-overlay/dist/css/index.css'; // Importa los estilos
+import { ref, onMounted } from "vue";
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/css/index.css";
 
 export default {
   components: {
-    Loading, // Registra el componente
+    Loading,
   },
   setup() {
-    const placa = ref('');
-    const tipoVehiculo = ref('');
-    const tiposVehiculo = ref([]); // Lista para los tipos de vehículos
-    const message = ref('');
-    const cargando = ref(false); // Control del spinner
+    const placa = ref("");
+    const tipoVehiculo = ref("");
+    const tiposVehiculo = ref([]);
+    const message = ref("");
+    const cargando = ref(false);
 
-    // Función para obtener los tipos de vehículos desde el backend
     const obtenerTiposVehiculos = async () => {
-      cargando.value = true; // Mostrar el spinner
+      cargando.value = true;
       try {
-        const response = await fetch('http://localhost:8080/api/configuracion/tarifas');
+        const response = await fetch(
+          "http://localhost:8080/api/configuracion/tarifas"
+        );
         if (!response.ok) {
-          throw new Error('Error al obtener los tipos de vehículos.');
+          throw new Error("Error al obtener los tipos de vehículos.");
         }
         const data = await response.json();
-        tiposVehiculo.value = data.map((tarifa) => tarifa.tipoVehiculo); // Extraer los tipos de vehículo
+        tiposVehiculo.value = data.map((tarifa) => tarifa.tipoVehiculo);
       } catch (error) {
-        console.error('Error al cargar los tipos de vehículos:', error);
+        console.error("Error al cargar los tipos de vehículos:", error);
       } finally {
-        cargando.value = false; // Ocultar el spinner
+        cargando.value = false;
       }
     };
 
-    // Función para registrar un vehículo
     const registerVehicle = async () => {
-      cargando.value = true; // Mostrar el spinner
-      message.value = ''; // Limpiar el mensaje de estado
+      cargando.value = true;
+      message.value = "";
       try {
-        const response = await fetch('http://localhost:8080/api/vehiculos/entrada', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ placa: placa.value, tipoVehiculo: tipoVehiculo.value }),
-        });
+        const response = await fetch(
+          "http://localhost:8080/api/vehiculos/entrada",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              placa: placa.value,
+              tipoVehiculo: tipoVehiculo.value,
+            }),
+          }
+        );
         const data = await response.json();
         message.value = data.mensaje;
       } catch (error) {
-        console.error('Error al registrar el vehículo:', error);
-        message.value = 'Error al registrar el vehículo.';
+        console.error("Error al registrar el vehículo:", error);
+        message.value = "Error al registrar el vehículo.";
       } finally {
-        cargando.value = false; // Ocultar el spinner
+        cargando.value = false;
       }
     };
 
-    // Cargar los tipos de vehículos al montar el componente
     onMounted(obtenerTiposVehiculos);
 
     return {
@@ -113,141 +118,96 @@ export default {
 </script>
 
 <style scoped>
-/* Mantén los estilos existentes */
+/* Fondo con degradado animado */
 .home {
   display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  width: 100%;
-  min-height: 80vh;
-  align-items: center;
   justify-content: center;
-}
-
-.container-form {
-  display: flex;
-  flex-direction: column;
-  justify-self: center;
-  align-self: center;
-  border: 2px solid #6c757d;
-  width: 500px;
-  background: #fff;
-  border-radius: 10px;
-  padding: 10px;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin: 20px 20px;
-  margin-bottom: 10px;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(45deg, #0072ff, #00c6ff);
+  background-size: 200% 200%;
+  animation: gradientAnimation 6s ease infinite;
   padding: 20px;
 }
 
+/* Animación del fondo */
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Contenedor del formulario */
+.container-form {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  padding: 30px;
+  width: 400px;
+}
+
+/* Título del formulario */
 .form-title {
-  font-size: 30px;
-  font-weight: 700;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #0072ff;
   text-align: center;
-  color: #212529;
+  margin-bottom: 20px;
 }
 
+/* Campos de entrada */
 .inputField {
-  padding: 15px 20px;
-  width: 100%;
-  border: 1px solid #6c757d;
+  padding: 12px 15px;
+  border: 2px solid #0072ff;
   border-radius: 10px;
-  font-size: 18px;
-  color: #000;
-}
-
-.feedback-container {
-  text-align: center;
-  margin-top: 10px;
-}
-
-.feedback-message {
   font-size: 16px;
-  color: #212529;
-}
-.info-inputField {
-  color: #212529;
-  font-weight: 600;
-  font-size: 18px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
 }
 
-.inputField {
-  padding: 15px 20px;
-  width: 100%;
-  border: 1px solid #6c757d;
-  border-radius: 10px;
-  font-size: 18px;
-  color: #000;
-  transition: all 0.3s ease; /* Animación suave */
+.inputField:focus {
+  border-color: #00c6ff;
+  box-shadow: 0 0 10px rgba(0, 198, 255, 0.5);
+  outline: none;
 }
 
 .inputField::placeholder {
   color: #6c757d;
-  font-style: oblique;
+  font-style: italic;
 }
 
+/* Botón del formulario */
 .form-btn {
-  width: 100%;
-  background-color: #332FF6;
+  background: linear-gradient(to right, #0072ff, #00c6ff);
   color: #fff;
+  font-size: 1.2rem;
+  padding: 12px;
   border: none;
-  outline: none;
-  border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 15px;
-  font-weight: 700;
-  margin: 10px 0 0 auto;
-  padding: 15px;
   transition: all 0.3s ease;
 }
 
 .form-btn:hover {
-  background-color: rgba(51, 47, 246, 0.9);
-  transform: scale(1.01);
+  background: linear-gradient(to right, #00c6ff, #0072ff);
+  box-shadow: 0 0 15px rgba(0, 198, 255, 0.5);
+  transform: scale(1.05);
 }
+
+/* Mensajes de feedback */
 .feedback-container {
-  position: relative;
-  /* border: 2px solid red; */
-  border-radius: 5px;
-  padding: 10px;
   margin-top: 10px;
   text-align: center;
-  min-height: 50px;
 }
 
 .feedback-message {
-  font-size: 16px;
-  color: #212529;
+  font-size: 14px;
+  color: #0072ff;
 }
-
-.spinner-feedback {
-  border: 4px solid #f3f3f3; /* Gris claro */
-  border-top: 4px solid #332FF6; /* Azul */
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  animation: spin 1s linear infinite;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-
-
 </style>

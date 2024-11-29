@@ -1,24 +1,19 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg ">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
       <div class="container-fluid">
         <!-- Título dinámico del parqueadero -->
-        <router-link to="/" class="navbar-brand">
+        <router-link to="/hero" class="navbar-brand d-none d-lg-block">
           <h1 id="principal-title">{{ nombreParqueadero }}</h1>
         </router-link>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
+            <!-- Opciones principales -->
             <li class="nav-item">
               <router-link to="/entry" class="nav-link">Registrar Entrada</router-link>
             </li>
@@ -28,8 +23,20 @@
             <li class="nav-item">
               <router-link to="/" class="nav-link">Estado del Parqueadero</router-link>
             </li>
-            <li class="nav-item">
-              <router-link to="configuration" class="nav-link">Configuracíon</router-link>
+            <!-- Dropdown para opciones secundarias -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Más Opciones
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <li>
+                  <router-link to="/configuration" class="dropdown-item">Configuración</router-link>
+                </li>
+                <li>
+                  <router-link to="/maps" class="dropdown-item">Parqueaderos Cercanos</router-link>
+                </li>
+              </ul>
             </li>
           </ul>
         </div>
@@ -39,6 +46,7 @@
     <!-- Spinner -->
     <loading v-model:active="loading" :is-full-page="true" />
 
+    <!-- Vista dinámica del router -->
     <router-view />
   </div>
 </template>
@@ -66,7 +74,8 @@ export default {
           throw new Error("Error al obtener el nombre del parqueadero.");
         }
         const data = await response.json();
-        nombreParqueadero.value = data.nombreParqueadero || "Nombre no disponible";
+        nombreParqueadero.value =
+          data.nombreParqueadero || "Nombre no disponible";
       } catch (error) {
         console.error("Error al cargar el nombre del parqueadero:", error);
         nombreParqueadero.value = "Error al cargar";
@@ -88,7 +97,7 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
 
 * {
   box-sizing: border-box;
@@ -98,59 +107,105 @@ export default {
   text-decoration: none;
   list-style: none;
   font-family: "Poppins", serif;
-  -webkit-font-smoothing: antialiased; /* Para navegadores basados en WebKit */
-  -moz-osx-font-smoothing: grayscale; /* Para Firefox en macOS */
+  -webkit-font-smoothing: antialiased;
+  /* Para navegadores basados en WebKit */
+  -moz-osx-font-smoothing: grayscale;
+  /* Para Firefox en macOS */
 }
 
-
 .navbar {
-  background-color: #fff;
-  margin-bottom: 10px;
+  background-color: #f8f9fa;
+  /* Color claro */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  /* Sombra suave */
   padding: 10px;
-  box-shadow: #161a1d;
-  box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.navbar-brand h1 {
+  font-size: 1.5rem;
+  /* Ajusta el tamaño del título */
+  margin: 0;
+  font-weight: bold;
+  color: #181818;
 }
 
 .nav-link {
-  color: #181818;
+  color: #555;
+  /* Color del texto */
+  transition: color 0.3s ease-in-out;
 }
 
-/* Estilo para el enlace activo en la navegación */
+.nav-link:hover,
 .nav-link.router-link-exact-active {
-  color: #332FF6 !important;
-  font-weight: 600;
+  color: #0d6efd;
+  /* Color azul de Bootstrap para hover y activo */
+  font-weight: bold;
 }
 
-#principal-title {
-  color: #181818;
-  font-weight: 700;
-  /* mover hacia la derecha proporcional al contenedor */
-  margin-left: 0%;
+.dropdown-menu {
+  background-color: #fff;
+  /* Fondo blanco para el dropdown */
+  border-radius: 0.25rem;
+  /* Bordes suaves */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  /* Sombra para el dropdown */
+  max-height: 200px; /* Altura máxima del menú desplegable */
+  overflow-y: auto; /* Habilita el desplazamiento vertical */
 }
 
-#navbarNav {
-  margin-right: 5%;
+.dropdown-item {
+  color: #555;
+  /* Color de los elementos */
 }
 
-/* Se borraron todos los estilos con nombre Fira-sans */
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+  /* Fondo claro en hover */
+  color: #0d6efd;
+  /* Color azul en hover */
+}
 
+/* Ocultar el título en pantallas pequeñas */
+.navbar-brand.d-none.d-lg-block {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .navbar-brand.d-none.d-lg-block {
+    display: block;
+  }
+}
+
+/* Estilos para placa en el SweetAlert */
 .placa-salida {
   display: inline-block;
-  padding: 6px 10px;
+  padding: 10px 20px;
   font-weight: bold;
-  font-size: 1.4rem;
-  background-color: #ffdd00; /* Color amarillo como una placa */
-  color: #161a1d; /* Color de texto oscuro */
-  border: 1px solid #161a1d; /* Borde oscuro */
-  border-radius: 5%;
-  letter-spacing: 1px;
+  font-size: 1.5rem;
+  color: #030303e8; /* Texto en blanco para contraste */
+  background: linear-gradient(45deg, #ffdd00, #ffa600); /* Degradado amarillo */
+  border: 2px solid #d00000; /* Borde rojo vibrante */
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para profundidad */
   text-align: center;
+  letter-spacing: 2px; /* Espaciado entre letras */
+  text-transform: uppercase; /* Letras mayúsculas */
+  animation: pulse 1.5s infinite; /* Animación para resaltar */
 }
 
-.placa-salida::before,
-.placa-salida::after {
-  content: "•";
-  margin: 0 2px;
-  color: #161a1d; /* Color de los puntos al lado de la placa */
+/* Animación de pulso */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
 }
 </style>
