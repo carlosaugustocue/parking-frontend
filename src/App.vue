@@ -36,6 +36,9 @@
                 <li>
                   <router-link to="/maps" class="dropdown-item">Parqueaderos Cercanos</router-link>
                 </li>
+                <li>
+                  <router-link to="/capture" class="dropdown-item">Capturar</router-link>
+                </li>
               </ul>
             </li>
           </ul>
@@ -184,7 +187,7 @@ export default {
   font-size: 1.5rem;
   color: #030303e8; /* Texto en blanco para contraste */
   background: linear-gradient(45deg, #ffdd00, #ffa600); /* Degradado amarillo */
-  border: 2px solid #d00000; /* Borde rojo vibrante */
+  border: 3px solid #000000; 
   border-radius: 8px; /* Bordes redondeados */
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para profundidad */
   text-align: center;

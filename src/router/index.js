@@ -6,6 +6,7 @@ import ParkingConfigurationView from '../views/ParkingConfigurationView.vue';
 import ParkingMapsView  from '../views/ParkingMapsView.vue';
 import HeroSectionView  from '../views/HeroSectionView.vue';
 import ApiStatisticsView  from '../views/ApiStatisticsView.vue';
+import CapturePlateView  from '../views/CapturePlateView.vue';
 
 const routes = [
   {
@@ -24,6 +25,7 @@ const routes = [
   { path: '/maps', name: 'Maps', component: ParkingMapsView },
   { path: '/hero', name: 'Hero', component: HeroSectionView },
   { path: '/statistics', name: 'statistics', component: ApiStatisticsView },
+  { path: '/capture', name: 'capture', component: CapturePlateView },
   
 ];
 

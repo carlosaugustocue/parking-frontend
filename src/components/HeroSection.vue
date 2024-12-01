@@ -6,7 +6,7 @@
       <p class="lead mb-5">
         Gestiona tus parqueaderos de forma rápida, fácil y eficiente.
       </p>
-      <router-link to="/" class="btn btn-gradient btn-lg px-5">
+      <router-link to="/entry" class="btn btn-gradient btn-lg px-5">
         Entrar
       </router-link>
     </div>
