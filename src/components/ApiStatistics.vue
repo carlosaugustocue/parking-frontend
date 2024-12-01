@@ -1,27 +1,63 @@
 <template>
-  <div class="statistics-container">
-    <loading v-model:active="cargando" :is-full-page="true" color="#0072ff" />
+  <div class="container">
+    <div class="statistics-container">
+      <loading v-model:active="cargando" :is-full-page="true" color="#332ff6" />
 
-    <h1 class="title">Estadísticas del Parqueadero</h1>
+      <h1 class="title">Estadísticas del Parqueadero</h1>
 
-    <!-- Contenedor para gráficos -->
-    <div id="charts">
-      <!-- Gráfico de ingresos y salidas por hora -->
-      <div class="chart">
-        <h2 class="chart-title">Ingresos y Salidas por Hora</h2>
-        <div id="hourly-stats"></div>
+      <!-- Resumen de estadísticas -->
+      <div class="summary">
+        <div class="summary-item">
+          <h3>Total Vehículos</h3>
+          <p>{{ totalVehiculos }}</p>
+        </div>
+        <div class="summary-item">
+          <h3>Ingresos Hoy</h3>
+          <p>{{ ingresosHoy }}</p>
+        </div>
+        <div class="summary-item">
+          <h3>Vehículo Más Frecuente</h3>
+          <p>{{ vehiculoFrecuente }}</p>
+        </div>
       </div>
 
-      <!-- Gráfico de tipos de vehículos -->
-      <div class="chart">
-        <h2 class="chart-title">Tipos de Vehículos</h2>
-        <div id="vehicle-types"></div>
+      <!-- Gráficos -->
+      <div id="charts">
+        <div class="chart">
+          <h2 class="chart-title">Ingresos y Salidas por Hora</h2>
+          <div id="hourly-stats"></div>
+        </div>
+        <div class="chart">
+          <h2 class="chart-title">Tipos de Vehículos</h2>
+          <div id="vehicle-types"></div>
+        </div>
+        <div class="chart">
+          <h2 class="chart-title">Días Más Concurridos</h2>
+          <div id="day-stats"></div>
+        </div>
       </div>
 
-      <!-- Gráfico de días más concurridos -->
-      <div class="chart">
-        <h2 class="chart-title">Días Más Concurridos</h2>
-        <div id="day-stats"></div>
+      <!-- Últimos Vehículos Registrados -->
+      <div class="recent-activity">
+        <h2>Últimos Vehículos Registrados</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Placa</th>
+              <th>Hora de Entrada</th>
+              <th>Hora de Salida</th>
+              <th>Tipo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="vehiculo in ultimosVehiculos" :key="vehiculo.placa">
+              <td>{{ vehiculo.placa }}</td>
+              <td>{{ vehiculo.horaIngreso }}</td>
+              <td>{{ vehiculo.horaSalida || 'En el parqueadero' }}</td>
+              <td>{{ vehiculo.tipoVehiculo }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -32,6 +68,7 @@ import { ref, onMounted } from "vue";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/css/index.css";
 import * as d3 from "d3";
+import { format } from "date-fns";
 
 export default {
   components: {
@@ -39,6 +76,10 @@ export default {
   },
   setup() {
     const cargando = ref(false);
+    const totalVehiculos = ref(0);
+    const ingresosHoy = ref(0);
+    const vehiculoFrecuente = ref("");
+    const ultimosVehiculos = ref([]);
 
     const fetchStats = async () => {
       cargando.value = true;
@@ -47,27 +88,48 @@ export default {
         const response = await fetch("http://localhost:8080/api/estadisticas");
         const data = await response.json();
 
-        // Transformar los datos para que sean compatibles con D3.js
+        // Calcular métricas generales
+        totalVehiculos.value = Object.values(data.vehicleTypes).reduce(
+          (sum, count) => sum + count,
+          0
+        );
+        ingresosHoy.value = Object.values(data.hourlyStats).reduce(
+          (sum, count) => sum + count,
+          0
+        );
+        vehiculoFrecuente.value = Object.entries(data.vehicleTypes).reduce(
+          (max, [type, count]) => (count > max.count ? { type, count } : max),
+          { type: "", count: 0 }
+        ).type;
+
+        // Obtener y formatear los últimos vehículos registrados
+        const vehiculosResponse = await fetch(
+          "http://localhost:8080/api/ultimos-vehiculos?limite=5"
+        );
+        const vehiculosData = await vehiculosResponse.json();
+        ultimosVehiculos.value = vehiculosData.map((vehiculo) => ({
+          ...vehiculo,
+          horaIngreso: format(new Date(vehiculo.horaIngreso), "dd-MM-yyyy HH:mm:ss"),
+          horaSalida: vehiculo.horaSalida
+            ? format(new Date(vehiculo.horaSalida), "dd-MM-yyyy HH:mm:ss")
+            : null,
+        }));
+
+        // Transformar datos para D3
         const hourlyStats = {
           hours: Object.keys(data.hourlyStats),
           counts: Object.values(data.hourlyStats),
         };
 
         const vehicleTypes = Object.entries(data.vehicleTypes).map(
-          ([type, count]) => ({
-            type,
-            count,
-          })
+          ([type, count]) => ({ type, count })
         );
 
         const daysData = Object.entries(data.daysData).map(
-          ([dia, ingresos]) => ({
-            dia,
-            ingresos,
-          })
+          ([dia, ingresos]) => ({ dia, ingresos })
         );
 
-        // Renderizar los gráficos
+        // Renderizar gráficos
         renderHourlyStats(hourlyStats);
         renderVehicleTypes(vehicleTypes);
         renderDayStats(daysData);
@@ -107,7 +169,7 @@ export default {
         .attr("y", (d) => y(d))
         .attr("width", x.bandwidth())
         .attr("height", (d) => 300 - y(d))
-        .attr("fill", "#0072ff");
+        .attr("fill", "#332ff6");
 
       g.append("g")
         .attr("transform", "translate(0, 300)")
@@ -187,7 +249,7 @@ export default {
         .attr("y", (d) => y(d.ingresos))
         .attr("width", x.bandwidth())
         .attr("height", (d) => 300 - y(d.ingresos))
-        .attr("fill", "#0072ff");
+        .attr("fill", "#332ff6");
 
       g.append("g")
         .attr("transform", "translate(0, 300)")
@@ -203,6 +265,10 @@ export default {
 
     return {
       cargando,
+      totalVehiculos,
+      ingresosHoy,
+      vehiculoFrecuente,
+      ultimosVehiculos,
     };
   },
 };
@@ -218,8 +284,32 @@ export default {
 .title {
   text-align: center;
   margin-bottom: 30px;
-  color: #0072ff;
+  color: #332ff6;
   font-size: 2rem;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+  padding: 10px;
+  background: #eef1f7;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.summary-item {
+  text-align: center;
+}
+
+.summary-item h3 {
+  color: #332ff6;
+}
+
+.summary-item p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
 }
 
 .chart {
@@ -235,5 +325,31 @@ export default {
   font-size: 1.5rem;
   color: #333;
   margin-bottom: 15px;
+}
+
+.recent-activity {
+  margin: 30px auto;
+  width: 90%;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background: #f5f5f5;
+  color: #333;
 }
 </style>
