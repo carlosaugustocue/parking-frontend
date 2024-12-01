@@ -134,38 +134,37 @@ export default {
 
 .nav-link {
   color: #555;
-  /* Color del texto */
-  transition: color 0.3s ease-in-out;
+  transition: all 0.3s;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased; /* Mejora la nitidez del texto */
+  backface-visibility: hidden; /* Reduce artefactos de renderizado */
 }
 
-.nav-link:hover,
-.nav-link.router-link-exact-active {
-  color: #0d6efd;
+.nav-link:hover {
   /* Color azul de Bootstrap para hover y activo */
+  transform: scale(1.025);
+  color: #332ff6;
+}
+
+.nav-link.router-link-exact-active {
   font-weight: bold;
 }
 
 .dropdown-menu {
-  background-color: #fff;
-  /* Fondo blanco para el dropdown */
-  border-radius: 0.25rem;
-  /* Bordes suaves */
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  /* Sombra para el dropdown */
+  background-color: #fff; /* Fondo blanco para el dropdown */
+  border-radius: 0.25rem; /* Bordes suaves */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Sombra para el dropdown */
   max-height: 200px; /* Altura máxima del menú desplegable */
   overflow-y: auto; /* Habilita el desplazamiento vertical */
 }
 
 .dropdown-item {
-  color: #555;
-  /* Color de los elementos */
+  color: #555; /* Color de los elementos */
 }
 
 .dropdown-item:hover {
-  background-color: #f8f9fa;
-  /* Fondo claro en hover */
-  color: #0d6efd;
-  /* Color azul en hover */
+  background-color: #f8f9fa; /* Fondo claro en hover */
+  color: #332ff6; /* Color azul en hover */
 }
 
 /* Ocultar el título en pantallas pequeñas */
@@ -182,9 +181,10 @@ export default {
 /* Estilos para placa en el SweetAlert */
 .placa-salida {
   display: inline-block;
-  padding: 10px 20px;
+  padding: 10px 10px;
+  margin: 0 5px;
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   color: #030303e8; /* Texto en blanco para contraste */
   background: linear-gradient(45deg, #ffdd00, #ffa600); /* Degradado amarillo */
   border: 3px solid #000000; 

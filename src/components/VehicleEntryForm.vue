@@ -31,20 +31,18 @@
 
         <!-- Mensaje de estado -->
         <div class="feedback-container" v-if="message">
-          <p class="feedback-message">{{ message }}</p>
+          <p class=" text-center my-0">{{ message }}</p>
         </div>
 
         <!-- Botón para registrar -->
         <button type="submit" class="form-btn">Registrar</button>
       </form>
     </div>
-
-    <!-- Spinner global -->
-    <loading v-model:active="cargando" :is-full-page="true" color="#0072ff" />
   </div>
 </template>
 
 <script>
+import { mostrarSpinner } from "@/store/spinner";
 import { ref, onMounted } from "vue";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/css/index.css";
@@ -74,12 +72,11 @@ export default {
       } catch (error) {
         console.error("Error al cargar los tipos de vehículos:", error);
       } finally {
-        cargando.value = false;
       }
     };
 
     const registerVehicle = async () => {
-      cargando.value = true;
+      mostrarSpinner(); // Muestra Spinner Div
       message.value = "";
       try {
         const response = await fetch(
@@ -94,12 +91,13 @@ export default {
           }
         );
         const data = await response.json();
-        message.value = data.mensaje;
+        setTimeout(() => {
+          message.value = data.mensaje;
+        }, 1000);
       } catch (error) {
         console.error("Error al registrar el vehículo:", error);
         message.value = "Error al registrar el vehículo.";
       } finally {
-        cargando.value = false;
       }
     };
 
@@ -120,94 +118,78 @@ export default {
 <style scoped>
 /* Fondo con degradado animado */
 .home {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(45deg, #0072ff, #00c6ff);
-  background-size: 200% 200%;
-  animation: gradientAnimation 6s ease infinite;
-  padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%; 
+    min-height: 80vh;
+    align-items: center;
+    justify-content: center;
 }
-
-/* Animación del fondo */
-@keyframes gradientAnimation {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* Contenedor del formulario */
 .container-form {
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-  border-radius: 15px;
-  padding: 30px;
-  width: 400px;
-}
-
-/* Título del formulario */
-.form-title {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #0072ff;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-/* Campos de entrada */
-.inputField {
-  padding: 12px 15px;
-  border: 2px solid #0072ff;
-  border-radius: 10px;
-  font-size: 16px;
-  margin-bottom: 15px;
-  transition: all 0.3s ease;
-}
-
-.inputField:focus {
-  border-color: #00c6ff;
-  box-shadow: 0 0 10px rgba(0, 198, 255, 0.5);
-  outline: none;
-}
-
-.inputField::placeholder {
-  color: #6c757d;
-  font-style: italic;
-}
-
-/* Botón del formulario */
-.form-btn {
-  background: linear-gradient(to right, #0072ff, #00c6ff);
-  color: #fff;
-  font-size: 1.2rem;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.form-btn:hover {
-  background: linear-gradient(to right, #00c6ff, #0072ff);
-  box-shadow: 0 0 15px rgba(0, 198, 255, 0.5);
-  transform: scale(1.05);
-}
-
-/* Mensajes de feedback */
-.feedback-container {
-  margin-top: 10px;
-  text-align: center;
-}
-
-.feedback-message {
-  font-size: 14px;
-  color: #0072ff;
-}
+    display: flex;
+    flex-direction: column;
+    justify-self: center; /* Centrar en el eje X */
+    align-self: center; /* Centrar en el eje Y */
+    border: 2px solid #6c757d;
+    width: 500px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px;
+  }
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 20px 20px;
+    margin-bottom: 10px;
+    padding: 20px;
+  }
+  
+  .form-title {
+    font-size: 30px;
+    font-weight: 700;
+    text-align: center;
+    color: #212529;
+  }
+  
+  .info-inputField {
+    color: #212529;
+    font-weight: 500;
+    font-weight: 600;
+    font-size: 18px;
+  }
+  .inputField {
+    padding: 15px 20px;
+    width: 100%;
+    border: 1px solid #6c757d;
+    border-radius: 10px;
+    font-size: 18px;
+    color: #000;
+    transition: all 0.3s ease; /* Animación suave */
+  }
+  .inputField::placeholder {
+    color: #6c757d;
+    font-style: oblique;
+  }
+  
+  .form-btn {
+    width: 100%;
+    background-color: #332FF6;
+    color: #fff;
+    border: none;
+    outline: none;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 700;
+    margin: 10px auto;
+    padding: 15px;
+    transition: all 0.3s ease;
+  }
+  .form-btn:hover {
+    background-color: rgba(51, 47, 246, 0.9);
+    transform: scale(1.01);
+  }
 </style>

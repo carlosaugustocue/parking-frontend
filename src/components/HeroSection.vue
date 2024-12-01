@@ -34,11 +34,12 @@ export default {
 <style>
 /* Fondo degradado animado */
 .hero-container {
-  height: 100vh;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  width: 100%; 
+  min-height: 92vh;
   align-items: center;
-  position: relative;
+  justify-content: center;
   background: linear-gradient(45deg, #0072ff, #00c6ff, #0072ff);
   background-size: 300% 300%;
   animation: gradientBackground 6s ease infinite;
@@ -78,13 +79,13 @@ export default {
 /* Botón con degradado */
 .btn-gradient {
   background: linear-gradient(to right, #00c6ff, #0072ff);
-  color: white;
+  color: #fff;
   border: none;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .btn-gradient:hover {
-  transform: scale(1.1);
+  transform: scale(1.025);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 

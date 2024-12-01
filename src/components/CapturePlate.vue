@@ -1,18 +1,14 @@
 <template>
     <div class="container">
       <h1 class="title">Capturar Placa</h1>
-      <div class="content">
         <!-- Botón para activar el servicio -->
         <button class="btn-capture" @click="capturarPlaca" :disabled="cargando">
           {{ cargando ? "Procesando..." : "Capturar Placa" }}
         </button>
-  
         <!-- Mensaje de procesamiento -->
         <p v-if="cargando" class="mensaje">Procesando...</p>
-  
         <!-- Mostrar la placa capturada o el mensaje de error -->
         <p v-else class="placa" :class="{ error: error }">{{ textoPlaca }}</p>
-      </div>
     </div>
   </template>
   
@@ -64,29 +60,24 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 50px;
+    width: 100%; 
+    min-height: 80vh;
+    gap: 30px;
   }
   
   .title {
     font-size: 2rem;
-    margin-bottom: 20px;
-  }
-  
-  .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    font-weight: 700;
   }
   
   .btn-capture {
-    background-color: #007bff;
-    color: white;
+    background-color: #332FF6;
+    color: #fff;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 1rem;
-    margin-bottom: 20px;
     transition: background-color 0.3s;
   }
   
@@ -96,16 +87,16 @@
   }
   
   .btn-capture:hover:not(:disabled) {
-    background-color: #0056b3;
+    background-color: #007bff;
   }
   
   .mensaje {
-    font-size: 4rem;
+    font-size: 2rem;
     color: #39348f;
   }
   
   .placa {
-    font-size: 2rem;
+    font-size: 1.5rem;
   font-weight: bold;
   letter-spacing: 3px;
   color: #333;
