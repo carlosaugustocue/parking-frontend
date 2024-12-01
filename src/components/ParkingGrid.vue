@@ -1,7 +1,5 @@
 <template>
   <div class="container">
-    <!-- Spinner de vue-loading-overlay -->
-    <loading v-model:active="cargando" :is-full-page="true" color="#332FF6" />
 
     <p class="info-parqueadero">
       Ocupados:
@@ -312,8 +310,4 @@ export default {
   line-height: 1.5;
   text-align: center;
 }
-
-
-
-
 </style>

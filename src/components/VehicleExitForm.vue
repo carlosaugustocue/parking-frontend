@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import { mostrarSpinner } from '@/store/spinner';
 import { ref, onMounted } from 'vue';
 
 export default {
@@ -74,6 +75,7 @@ export default {
 
     // Función para registrar la salida del vehículo
     const exitVehicle = async () => {
+      mostrarSpinner();
       responseData.value = ''; // Reiniciar la respuesta
       try {
         const response = await fetch(
@@ -83,7 +85,9 @@ export default {
         if (!response.ok) throw new Error('Error en la solicitud');
 
         const data = await response.json();
-        responseData.value = data;
+        setTimeout(() => {
+          responseData.value = data;
+        }, 1000)
         message.value = '';
         await fetchVehiculos(); // Actualizar la lista de placas después de la salida
       } catch (error) {
