@@ -18,10 +18,10 @@
               <router-link to="/entry" class="nav-link">Registrar Entrada</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/exit" class="nav-link">Registrar Salida</router-link>
+              <router-link to="/" class="nav-link">Estado del Parqueadero</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/" class="nav-link">Estado del Parqueadero</router-link>
+              <router-link to="/exit" class="nav-link">Registrar Salida</router-link>
             </li>
             <!-- Dropdown para opciones secundarias -->
             <li class="nav-item dropdown">
@@ -38,6 +38,9 @@
                 </li>
                 <li>
                   <router-link to="/capture" class="dropdown-item">Capturar</router-link>
+                </li>
+                <li>
+                  <router-link to="/statistics" class="dropdown-item">Estadisticas</router-link>
                 </li>
               </ul>
             </li>
