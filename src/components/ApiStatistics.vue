@@ -38,27 +38,33 @@
       </div>
 
       <!-- Últimos Vehículos Registrados -->
-      <div class="recent-activity">
-        <h2>Últimos Vehículos Registrados</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Placa</th>
-              <th>Hora de Entrada</th>
-              <th>Hora de Salida</th>
-              <th>Tipo</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="vehiculo in ultimosVehiculos" :key="vehiculo.placa">
-              <td>{{ vehiculo.placa }}</td>
-              <td>{{ vehiculo.horaIngreso }}</td>
-              <td>{{ vehiculo.horaSalida || 'En el parqueadero' }}</td>
-              <td>{{ vehiculo.tipoVehiculo }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <div class="recent-activity container mt-4">
+  <h2 class="text-center mb-4">Últimos Vehículos Registrados</h2>
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">Placa</th>
+          <th scope="col">Hora de Entrada</th>
+          <th scope="col">Hora de Salida</th>
+          <th scope="col">Tipo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="vehiculo in ultimosVehiculos" :key="vehiculo.placa">
+          <td>
+            <span class="placa-style">{{ vehiculo.placa }}</span>
+          </td>
+          <td>{{ vehiculo.horaIngreso }}</td>
+          <td>{{ vehiculo.horaSalida || 'En el parqueadero' }}</td>
+          <td>{{ vehiculo.tipoVehiculo }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
     </div>
   </div>
 </template>
@@ -352,4 +358,18 @@ th {
   background: #f5f5f5;
   color: #333;
 }
+
+.placa-style {
+    display: inline-block;
+    background-color: #ffbd00; /* Fondo similar al de placas reales */
+    border: 2px solid #000; /* Borde negro */
+    border-radius: 6px; /* Bordes redondeados */
+    padding: 5px 15px; /* Espaciado interno */
+    font-weight: bold; /* Letras en negrita */
+    font-family: 'Arial', sans-serif; /* Fuente simple */
+    color: #000; /* Texto negro */
+    text-align: center;
+    width: auto;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Sombra ligera */
+  }
 </style>

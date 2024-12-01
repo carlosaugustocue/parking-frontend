@@ -19,7 +19,7 @@
           </div>
           <div class="info-ad text-start">
             <p class="price-product-ad fw-bold text-success text-center">
-              $ {{ anuncioActual.precio || "No disponible" }} COP
+              {{ anuncioActual.precio || "No disponible" }} COP
             </p>
             <p class="descripcion-ad text-secondary">
               <strong>📏 Kilometraje:</strong> {{ anuncioActual.kilometraje }} <br>
@@ -55,26 +55,32 @@ export default {
   },
   computed: {
     anuncioActual() {
-      if (this.anuncios.length === 0) return {};
-      const anuncio = this.anuncios[this.indiceActual];
-      const atributos = anuncio.attributes.reduce((acc, attr) => {
-        acc[attr.id] = attr.value_name;
-        return acc;
-      }, {});
-      return {
-        marca: atributos.BRAND || "No disponible",
-        modelo: atributos.MODEL || "No disponible",
-        año: atributos.VEHICLE_YEAR || "No disponible",
-        kilometraje: atributos.KILOMETERS || "No disponible",
-        estado: atributos.ITEM_CONDITION || "No disponible",
-        precio: anuncio.price || "No disponible",
-        thumbnail: anuncio.thumbnail,
-        ubicacion: anuncio.address?.city_name || "No disponible",
-        vendedor: anuncio.seller?.nickname || "Anónimo",
-        link: anuncio.permalink || "#",  // Link al anuncio
-      };
-    },
+    if (this.anuncios.length === 0) return {};
+    const anuncio = this.anuncios[this.indiceActual];
+    const atributos = anuncio.attributes.reduce((acc, attr) => {
+      acc[attr.id] = attr.value_name;
+      return acc;
+    }, {});
+
+    return {
+      marca: atributos.BRAND || "No disponible",
+      modelo: atributos.MODEL || "No disponible",
+      año: atributos.VEHICLE_YEAR || "No disponible",
+      kilometraje: atributos.KILOMETERS || "No disponible",
+      estado: atributos.ITEM_CONDITION || "No disponible",
+      precio: anuncio.price
+        ? new Intl.NumberFormat("es-CO", {
+            style: "currency",
+            currency: "COP",
+          }).format(anuncio.price)
+        : "No disponible",
+      thumbnail: anuncio.thumbnail,
+      ubicacion: anuncio.address?.city_name || "No disponible",
+      vendedor: anuncio.seller?.nickname || "Anónimo",
+      link: anuncio.permalink || "#", // Link al anuncio
+    };
   },
+},
   mounted() {
     this.obtenerPublicidad();
     setInterval(this.actualizarAnuncio, 6000);
@@ -182,7 +188,7 @@ export default {
     left: 0;
     transform: translateY(-50%);
     background-color: #f8f9fa;
-    color: #0d6efd;
+    color: #332ff6;
     font-size: 24px;
     font-weight: 700;
     border: 1px solid #ced4da;
