@@ -39,8 +39,6 @@
 
 <script>
 import { ref, onMounted, computed } from "vue";
-import Loading from "vue-loading-overlay"; // Importar el componente
-import "vue-loading-overlay/dist/css/index.css"; // Importar los estilos
 import Swal from "sweetalert2";
 import Car from "@/assets/carro.png";
 import Hatchback from "@/assets/automovil.png";
@@ -52,7 +50,7 @@ import Truck from "@/assets/truck.png";
 
 export default {
   components: {
-    Loading, // Registrar el componente
+    
   },
   setup() {
     const spaces = ref([]);
@@ -210,6 +208,9 @@ export default {
   margin: 20px;
   text-align: center;
   font-weight: 500;
+  color: #1e1e1f;
+  /* sombra */
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .span-ocupados {

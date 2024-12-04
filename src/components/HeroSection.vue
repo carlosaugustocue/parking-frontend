@@ -40,7 +40,7 @@ export default {
   min-height: 92vh;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(45deg, #0072ff, #00c6ff, #0072ff);
+  background: linear-gradient(45deg, #332ff6, #00c6ff, #332ff6);
   background-size: 300% 300%;
   animation: gradientBackground 6s ease infinite;
   overflow: hidden;
@@ -78,7 +78,7 @@ export default {
 
 /* Botón con degradado */
 .btn-gradient {
-  background: linear-gradient(to right, #00c6ff, #0072ff);
+  background: linear-gradient(to right, #00c6ff, #332ff6);
   color: #fff;
   border: none;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
