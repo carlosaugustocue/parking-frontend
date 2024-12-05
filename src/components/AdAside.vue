@@ -2,7 +2,7 @@
   <div>
     <aside class="asideAd bg-light border-end" v-if="mostrarAside">
       <header class="d-flex justify-content-between align-items-center border-bottom p-2 mb-3">
-        <span class="title-header-aside fw-bold text-primary">Anuncios</span>
+        <span class="title-header-aside">Anuncios</span>
         <button class="btn btn-sm btn-outline-danger" @click="cerrarAside">X</button>
       </header>
 
@@ -125,13 +125,18 @@ export default {
     width: 20%;
     min-height: 100vh;
     position: fixed;
-    top: 60px;
+    top: 85px;
     left: 0;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     transition: all 0.4s ease-in-out;
     background: linear-gradient(145deg, #ffffff, #e4e7ec);
     z-index: 1000;
+  }
+
+  .title-header-aside {
+    color: #332ff6;
+    font-weight: 700;
   }
 
   /* Ocultar el aside desplazándolo hacia la izquierda */
@@ -184,7 +189,7 @@ export default {
 
 .open-aside {
     position: fixed;
-    top: 80px;
+    top: 105px;
     left: 0;
     transform: translateY(-50%);
     background-color: #f8f9fa;

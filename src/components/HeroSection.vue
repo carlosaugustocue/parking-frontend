@@ -2,7 +2,7 @@
   <div class="hero-container">
     <!-- Contenido principal del hero -->
     <div class="hero-content text-center text-white">
-      <h1 class="display-3 fw-bold mb-4">¡Bienvenido a ParkingApp!</h1>
+      <h1 class="display-3 fw-bold mb-4">¡Bienvenido a Parq!</h1>
       <p class="lead mb-5">
         Gestiona tus parqueaderos de forma rápida, fácil y eficiente.
       </p>

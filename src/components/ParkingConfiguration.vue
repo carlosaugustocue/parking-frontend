@@ -205,5 +205,10 @@
   
   <style scoped>
   /* Personaliza los márgenes y paddings si es necesario */
+
+  .btn-primary {
+    color: #332ff6;
+    color: #fff;
+  }
   </style>
   

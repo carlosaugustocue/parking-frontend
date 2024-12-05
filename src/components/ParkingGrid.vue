@@ -231,6 +231,7 @@ export default {
   gap: 20px;
   padding: 20px;
   background-color: transparent;
+  transition: all 0.3s ease;
 }
 
 .parking-space {
@@ -310,4 +311,11 @@ export default {
   line-height: 1.5;
   text-align: center;
 }
+
+/* Ocultar aside en pantallas pequeñas */
+@media (max-width: 992px) {
+  .parking-lot {
+  grid-template-columns: repeat(2, 1fr);
+  }
+} 
 </style>
