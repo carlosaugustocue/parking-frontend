@@ -3,6 +3,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
       <div class="container-fluid">
+        <img src="./assets/parq.png" alt="Logo parq" class="logo-app">
         <!-- Título dinámico del parqueadero -->
         <router-link to="/hero" class="navbar-brand d-none d-lg-block">
           <h1 id="principal-title">{{ nombreParqueadero }}</h1>
@@ -141,6 +142,19 @@ export default {
   font-weight: 500;
   -webkit-font-smoothing: antialiased; /* Mejora la nitidez del texto */
   backface-visibility: hidden; /* Reduce artefactos de renderizado */
+}
+
+.logo-app {
+  width: 5%;
+  border-radius: 20px;
+  margin: 0 10px;
+  cursor: pointer;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.logo-app:hover {
+  transform: scale(1.025);
 }
 
 .nav-link:hover {
